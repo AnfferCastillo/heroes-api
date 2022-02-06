@@ -1,5 +1,7 @@
 package com.anffercastillo.heroes.dto;
 
+import java.util.Objects;
+
 public class HeroDTO {
 
   private long id;
@@ -28,5 +30,21 @@ public class HeroDTO {
 
   public void setForename(String forename) {
     this.forename = forename;
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(forename, id, name);
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) return true;
+    if (obj == null) return false;
+    if (getClass() != obj.getClass()) return false;
+    HeroDTO other = (HeroDTO) obj;
+    return Objects.equals(forename, other.forename)
+        && id == other.id
+        && Objects.equals(name, other.name);
   }
 }

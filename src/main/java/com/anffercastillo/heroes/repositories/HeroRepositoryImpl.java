@@ -53,4 +53,9 @@ public class HeroRepositoryImpl implements HeroesRepository {
     var heroe = heroes.stream().filter(h -> h.getId() == id).findFirst().orElseThrow();
     heroes.remove(heroe);
   }
+
+  @Override
+  public HeroDTO updateHero(HeroDTO any) { // TODO Auto-generated method stub
+    return null;
+  }
 }

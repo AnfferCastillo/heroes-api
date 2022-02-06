@@ -12,4 +12,6 @@ public interface HeroesRepository {
   List<HeroDTO> getAllHeroes();
 
   void deleteHeroById(long id);
+
+  HeroDTO updateHero(HeroDTO hero);
 }

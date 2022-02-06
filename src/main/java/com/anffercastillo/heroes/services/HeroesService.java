@@ -1,5 +1,6 @@
 package com.anffercastillo.heroes.services;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -27,12 +28,25 @@ public class HeroesService {
     heroe3.setId(3L);
     heroe3.setName("Vegeta");
     heroe3.setForename("Vegeta");
-    heroes = List.of(heroe1, heroe2, heroe3);
+    heroes = new ArrayList<HeroeDTO>();
+
+    heroes.add(heroe1);
+    heroes.add(heroe2);
+    heroes.add(heroe3);
   }
 
   public HeroeDTO getHeroe(long id) {
     var heroe = this.heroes.stream().filter(h -> h.getId() == id).findFirst();
     // TODO: change this to a proper exception with 404
     return heroe.orElseThrow();
+  }
+
+  public List<HeroeDTO> getHeroes() {
+    // FIXME: return a copy
+    return heroes;
+  }
+
+  public void deleteHeroe(long id) {
+    heroes.removeIf(h -> h.getId() == id);
   }
 }

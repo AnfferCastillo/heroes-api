@@ -1,6 +1,6 @@
 package com.anffercastillo.heroes.dto;
 
-public class HeroeDTO {
+public class HeroDTO {
 
   private long id;
   private String name;

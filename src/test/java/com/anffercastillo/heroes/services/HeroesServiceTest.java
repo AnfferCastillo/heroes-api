@@ -48,7 +48,7 @@ public class HeroesServiceTest {
   public void getHeroeById_Not_Found_Test() {
     var id = -1L;
 
-    when(mockHeroesRepository.getHeroeById(1L)).thenThrow(new NoSuchElementException());
+    when(mockHeroesRepository.getHeroeById(id)).thenThrow(new NoSuchElementException());
     assertThrowsExactly(NoSuchElementException.class, () -> heroService.getHero(id));
   }
 
@@ -86,7 +86,7 @@ public class HeroesServiceTest {
   }
 
   @Test
-  public void updateHero_Test() {
+  public void updateHero_Test() throws Exception {
 
     var id = 1L;
     var heroUpdateRequest = new HeroRequest();
@@ -106,6 +106,30 @@ public class HeroesServiceTest {
     var actual = heroService.updateHero(id, heroUpdateRequest);
 
     assertEquals(expected, actual);
+  }
+
+  @Test
+  public void updateHero_Fail_Test() {
+    var id = -1L;
+    var heroUpdateRequest = new HeroRequest();
+    heroUpdateRequest.setName("INVALID_UPDATED_DUMMY_NAME");
+    heroUpdateRequest.setForename("INVALID_UPDATED_ANOTHER_DUMMY_NAM");
+
+    when(mockHeroesRepository.getHeroeById(id)).thenThrow(new NoSuchElementException());
+
+    assertThrows(NoSuchElementException.class, () -> heroService.updateHero(id, heroUpdateRequest));
+  }
+
+  @Test
+  public void updateHero_Fail_Invalid_Params_Test() {
+    var id = -1L;
+    var heroUpdateRequest = new HeroRequest();
+    heroUpdateRequest.setName("");
+    heroUpdateRequest.setForename("INVALID_UPDATED_ANOTHER_DUMMY_NAM");
+
+    when(mockHeroesRepository.getHeroeById(id)).thenThrow(new NoSuchElementException());
+
+    assertThrows(Exception.class, () -> heroService.updateHero(id, heroUpdateRequest));
   }
 
   private HeroDTO buildDummyHero(long id) {

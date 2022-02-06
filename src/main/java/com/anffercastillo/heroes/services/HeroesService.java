@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import com.anffercastillo.heroes.dto.HeroDTO;
 import com.anffercastillo.heroes.dto.HeroRequest;
@@ -35,8 +36,19 @@ public class HeroesService {
     heroesRepository.deleteHeroById(hero.getId());
   }
 
-  public HeroDTO updateHero(long id, HeroRequest heroUpdateRequest) {
+  public HeroDTO updateHero(long id, HeroRequest heroUpdateRequest) throws Exception {
+    if (!StringUtils.hasLength(heroUpdateRequest.getName())) {
+      // TODO: Change for HeroException later
+      throw new Exception(MessagesConstants.HERO_EMPTY_NAME_ERROR);
+    }
+
+    if (!StringUtils.hasLength(heroUpdateRequest.getForename())) {
+      // TODO: Change for HeroException later
+      throw new Exception(MessagesConstants.HERO_EMPTY_FORENAME_ERROR);
+    }
+
     var currentHero = getHero(id);
+
     currentHero.setForename(heroUpdateRequest.getForename());
     currentHero.setName(heroUpdateRequest.getName());
 

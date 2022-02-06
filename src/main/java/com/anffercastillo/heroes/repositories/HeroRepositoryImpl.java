@@ -58,4 +58,9 @@ public class HeroRepositoryImpl implements HeroesRepository {
   public HeroDTO updateHero(HeroDTO any) { // TODO Auto-generated method stub
     return null;
   }
+
+  @Override
+  public List<HeroDTO> getHeroesByName(String string) { // TODO Auto-generated method stub
+    return null;
+  }
 }

@@ -54,4 +54,12 @@ public class HeroesService {
 
     return heroesRepository.updateHero(currentHero);
   }
+
+  public List<HeroDTO> getHeroesByName(String name) throws Exception {
+    if (!StringUtils.hasLength(name)) {
+      // TODO: Change for HeroException later
+      throw new Exception(MessagesConstants.HERO_EMPTY_NAME_ERROR);
+    }
+    return heroesRepository.getHeroesByName(name);
+  }
 }

@@ -132,11 +132,33 @@ public class HeroesServiceTest {
     assertThrows(Exception.class, () -> heroService.updateHero(id, heroUpdateRequest));
   }
 
+  @Test
+  public void getHeroesByName_Test() throws Exception {
+    var dummyHero1 = buildDummyHero(1L);
+    var dummyHero2 = buildDummyHero(2L);
+    var dummyHero3 = buildDummyHero(3L);
+
+    when(mockHeroesRepository.getHeroesByName("DUMMY"))
+        .thenReturn(List.of(dummyHero1, dummyHero2, dummyHero3));
+
+    List<HeroDTO> heroes = heroService.getHeroesByName("DUMMY");
+
+    assertEquals(3, heroes.size());
+    assertEquals(dummyHero1, heroes.get(0));
+    assertEquals(dummyHero2, heroes.get(1));
+    assertEquals(dummyHero3, heroes.get(2));
+  }
+
+  @Test
+  public void getHeroesByName_Fail_Test() {
+    assertThrows(Exception.class, () -> heroService.getHeroesByName(""));
+  }
+
   private HeroDTO buildDummyHero(long id) {
     var dummyHero = new HeroDTO();
     dummyHero.setId(id);
-    dummyHero.setName("DUMMY_NAME");
-    dummyHero.setForename("ANOTHER_DUMMY_NAME");
+    dummyHero.setName("DUMMY_NAME_" + id);
+    dummyHero.setForename("ANOTHER_DUMMY_NAME_" + id);
     return dummyHero;
   }
 }

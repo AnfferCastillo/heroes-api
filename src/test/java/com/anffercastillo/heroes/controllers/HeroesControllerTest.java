@@ -12,6 +12,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
@@ -63,5 +64,12 @@ public class HeroesControllerTest {
             .getResponse()
             .getContentAsString();
     assertEquals(actualResponse, objectMapper.writeValueAsString(dummyHero));
+  }
+
+  @Test
+  public void getHeroByID_Not_Found_Test() throws Exception {
+    when(mockHeroService.getHero(ID)).thenThrow(new NoSuchElementException());
+
+    mockMvc.perform(get("/heroes/" + ID)).andExpect(status().isNotFound());
   }
 }

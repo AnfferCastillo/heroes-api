@@ -3,10 +3,15 @@ package com.anffercastillo.heroes;
 import com.anffercastillo.heroes.dto.HeroDTO;
 import com.anffercastillo.heroes.dto.SearchResponse;
 import com.anffercastillo.heroes.services.HeroesService;
+import com.anffercastillo.heroes.utils.MessagesConstants;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
+
+import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("/heroes")
@@ -30,7 +35,12 @@ public class HeroesController {
 
   @GetMapping("/{id}")
   public HeroDTO getHero(@PathVariable long id) {
-    var hero = heroesService.getHero(id);
-    return hero;
+    // FIXME: change this after exception handling is implmented
+    try {
+      var hero = heroesService.getHero(id);
+      return hero;
+    } catch (NoSuchElementException e) {
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND, MessagesConstants.HERO_NOT_FOUND);
+    }
   }
 }

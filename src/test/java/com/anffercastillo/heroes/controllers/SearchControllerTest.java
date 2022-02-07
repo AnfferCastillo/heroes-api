@@ -1,5 +1,6 @@
 package com.anffercastillo.heroes.controllers;
 
+import com.anffercastillo.heroes.dto.SearchResponse;
 import com.anffercastillo.heroes.services.HeroesService;
 import com.anffercastillo.heroes.utils.HeroTestsUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -32,7 +33,8 @@ public class SearchControllerTest {
 
     var dummyHeroesList = List.of(dummyHero, dummyHero2);
 
-    var expectedResponse = objectMapper.writeValueAsString(dummyHeroesList);
+    var expectedResponse =
+        objectMapper.writeValueAsString(SearchResponse.buildResponse(dummyHeroesList));
     when(mockHeroService.getHeroesByName(name)).thenReturn(dummyHeroesList);
 
     var actualResponse =
@@ -45,5 +47,10 @@ public class SearchControllerTest {
 
     verify(mockHeroService, times(1)).getHeroesByName(eq(name));
     assertEquals(expectedResponse, actualResponse);
+  }
+
+  @Test
+  public void searchHeroesByName_Bad_Request_Test() throws Exception {
+    mockMvc.perform(get("/search")).andExpect(status().isBadRequest());
   }
 }

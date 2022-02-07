@@ -13,4 +13,10 @@ public class SearchResponse {
   public void setResults(List<HeroDTO> results) {
     this.results = results;
   }
+
+  public static SearchResponse buildResponse(List<HeroDTO> results) {
+    var searchResponse = new SearchResponse();
+    searchResponse.setResults(results);
+    return searchResponse;
+  }
 }

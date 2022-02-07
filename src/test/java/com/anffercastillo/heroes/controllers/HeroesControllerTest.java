@@ -50,6 +50,7 @@ public class HeroesControllerTest {
             .getResponse()
             .getContentAsString();
 
+    verify(mockHeroService, times(1)).getHeroes();
     assertEquals(actualResponse, objectMapper.writeValueAsString(expectedResponse));
   }
 
@@ -65,6 +66,8 @@ public class HeroesControllerTest {
             .andReturn()
             .getResponse()
             .getContentAsString();
+
+    verify(mockHeroService, times(1)).getHero(ID);
     assertEquals(actualResponse, objectMapper.writeValueAsString(dummyHero));
   }
 
@@ -73,11 +76,14 @@ public class HeroesControllerTest {
     when(mockHeroService.getHero(ID)).thenThrow(new NoSuchElementException());
 
     mockMvc.perform(get("/heroes/" + ID)).andExpect(status().isNotFound());
+
+    verify(mockHeroService, times(1)).getHero(ID);
   }
 
   @Test
   public void deleteHeroByID_Test() throws Exception {
     mockMvc.perform(delete("/heroes/" + ID)).andExpect(status().isOk());
+    verify(mockHeroService, times(1)).deleteHero(1L);
   }
 
   @Test
@@ -85,20 +91,22 @@ public class HeroesControllerTest {
     doThrow(new NoSuchElementException()).when(mockHeroService).deleteHero(ID);
 
     mockMvc.perform(delete("/heroes/" + ID)).andExpect(status().isNotFound());
+    verify(mockHeroService, times(1)).deleteHero(ID);
   }
 
   @Test
   public void updateHeroById_Test() throws Exception {
-    var dummyHero = HeroTestsUtils.buildDummyHero(1L);
-    dummyHero.setForename("UPDATED_FORENAME");
-    dummyHero.setName("UPDATED_NAME");
+    var updated_forename = "UPDATED_FORENAME";
+    var updated_name = "UPDATED_NAME";
 
-    var heroRequest = new HeroRequest();
-    heroRequest.setForename("UPDATED_FORENAME");
-    heroRequest.setName("UPDATED_NAME");
+    var dummyHero = HeroTestsUtils.buildDummyHero(ID);
+    dummyHero.setForename(updated_forename);
+    dummyHero.setName(updated_name);
+
+    HeroRequest heroRequest = buildHeroRequest(updated_forename, updated_name);
 
     var expectedResonse = objectMapper.writeValueAsString(dummyHero);
-    when(mockHeroService.updateHero(eq(1L), any())).thenReturn(dummyHero);
+    when(mockHeroService.updateHero(eq(ID), any())).thenReturn(dummyHero);
 
     var actualResponse =
         mockMvc
@@ -111,7 +119,29 @@ public class HeroesControllerTest {
             .getResponse()
             .getContentAsString();
 
-    verify(mockHeroService, times(1)).updateHero(eq(1L), any());
+    verify(mockHeroService, times(1)).updateHero(eq(ID), any());
     assertEquals(expectedResonse, actualResponse);
+  }
+
+  @Test
+  public void updateHeroById_Not_Found_Test() throws Exception {
+    var heroRequest = buildHeroRequest("SOME_FORENAME", "SOME_NAME");
+    when(mockHeroService.updateHero(eq(ID), any())).thenThrow(new NoSuchElementException());
+
+    mockMvc
+        .perform(
+            put("/heroes/" + ID)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(heroRequest)))
+        .andExpect(status().isNotFound());
+
+    verify(mockHeroService, times(1)).updateHero(eq(ID), any());
+  }
+
+  private HeroRequest buildHeroRequest(String updated_forename, String updated_name) {
+    var heroRequest = new HeroRequest();
+    heroRequest.setForename(updated_forename);
+    heroRequest.setName(updated_name);
+    return heroRequest;
   }
 }

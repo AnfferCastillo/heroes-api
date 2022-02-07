@@ -43,6 +43,11 @@ public class HeroesController {
 
   @DeleteMapping("/{id}")
   public void deleteHero(@PathVariable long id) {
-    heroesService.deleteHero(id);
+    // FIXME: change this after exception handling is implmented
+    try {
+      heroesService.deleteHero(id);
+    } catch (NoSuchElementException e) {
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND, MessagesConstants.HERO_NOT_FOUND);
+    }
   }
 }

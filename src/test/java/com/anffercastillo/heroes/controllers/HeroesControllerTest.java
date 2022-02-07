@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -77,5 +78,12 @@ public class HeroesControllerTest {
   @Test
   public void deleteHeroByID_Test() throws Exception {
     mockMvc.perform(delete("/heroes/" + ID)).andExpect(status().isOk());
+  }
+
+  @Test
+  public void deleteHeroByID_NotFound_Test() throws Exception {
+    doThrow(new NoSuchElementException()).when(mockHeroService).deleteHero(ID);
+
+    mockMvc.perform(delete("/heroes/" + ID)).andExpect(status().isNotFound());
   }
 }

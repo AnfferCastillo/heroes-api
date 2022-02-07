@@ -1,6 +1,7 @@
 package com.anffercastillo.heroes;
 
 import com.anffercastillo.heroes.dto.HeroDTO;
+import com.anffercastillo.heroes.dto.HeroRequest;
 import com.anffercastillo.heroes.dto.SearchResponse;
 import com.anffercastillo.heroes.services.HeroesService;
 import com.anffercastillo.heroes.utils.MessagesConstants;
@@ -46,6 +47,16 @@ public class HeroesController {
     // FIXME: change this after exception handling is implmented
     try {
       heroesService.deleteHero(id);
+    } catch (NoSuchElementException e) {
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND, MessagesConstants.HERO_NOT_FOUND);
+    }
+  }
+
+  @PutMapping("/{id}")
+  public HeroDTO updateHero(@PathVariable long id, @RequestBody HeroRequest hero) throws Exception {
+    // FIXME: change this after exception handling is implmented
+    try {
+      return heroesService.updateHero(id, hero);
     } catch (NoSuchElementException e) {
       throw new ResponseStatusException(HttpStatus.NOT_FOUND, MessagesConstants.HERO_NOT_FOUND);
     }

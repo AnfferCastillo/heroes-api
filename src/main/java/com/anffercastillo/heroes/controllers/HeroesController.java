@@ -1,4 +1,4 @@
-package com.anffercastillo.heroes;
+package com.anffercastillo.heroes.controllers;
 
 import com.anffercastillo.heroes.dto.HeroDTO;
 import com.anffercastillo.heroes.dto.HeroRequest;

@@ -1,6 +1,5 @@
 package com.anffercastillo.heroes.controllers;
 
-import com.anffercastillo.heroes.HeroesController;
 import com.anffercastillo.heroes.dto.HeroRequest;
 import com.anffercastillo.heroes.dto.SearchResponse;
 import com.anffercastillo.heroes.services.HeroesService;

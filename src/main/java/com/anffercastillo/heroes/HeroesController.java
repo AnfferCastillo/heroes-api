@@ -1,11 +1,10 @@
 package com.anffercastillo.heroes;
 
+import com.anffercastillo.heroes.dto.SearchResponse;
+import com.anffercastillo.heroes.services.HeroesService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.anffercastillo.heroes.dto.SearchResponse;
-import com.anffercastillo.heroes.services.HeroesService;
 
 @RestController
 @RequestMapping("/heroes")
@@ -20,7 +19,7 @@ public class HeroesController {
   @GetMapping
   public SearchResponse getHeroes() {
     var heroes = heroesService.getHeroes();
-    // TOD: move to a factory method
+    // TODO: move to a factory method
     var searchResponse = new SearchResponse();
     searchResponse.setResults(heroes);
 

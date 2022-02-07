@@ -1,6 +1,7 @@
 package com.anffercastillo.heroes.controllers;
 
 import com.anffercastillo.heroes.HeroesController;
+import com.anffercastillo.heroes.dto.HeroRequest;
 import com.anffercastillo.heroes.dto.SearchResponse;
 import com.anffercastillo.heroes.services.HeroesService;
 import com.anffercastillo.heroes.utils.HeroTestsUtils;
@@ -9,16 +10,15 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 import java.util.NoSuchElementException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(HeroesController.class)
@@ -85,5 +85,33 @@ public class HeroesControllerTest {
     doThrow(new NoSuchElementException()).when(mockHeroService).deleteHero(ID);
 
     mockMvc.perform(delete("/heroes/" + ID)).andExpect(status().isNotFound());
+  }
+
+  @Test
+  public void updateHeroById_Test() throws Exception {
+    var dummyHero = HeroTestsUtils.buildDummyHero(1L);
+    dummyHero.setForename("UPDATED_FORENAME");
+    dummyHero.setName("UPDATED_NAME");
+
+    var heroRequest = new HeroRequest();
+    heroRequest.setForename("UPDATED_FORENAME");
+    heroRequest.setName("UPDATED_NAME");
+
+    var expectedResonse = objectMapper.writeValueAsString(dummyHero);
+    when(mockHeroService.updateHero(eq(1L), any())).thenReturn(dummyHero);
+
+    var actualResponse =
+        mockMvc
+            .perform(
+                put("/heroes/" + ID)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(heroRequest)))
+            .andExpect(status().isOk())
+            .andReturn()
+            .getResponse()
+            .getContentAsString();
+
+    verify(mockHeroService, times(1)).updateHero(eq(1L), any());
+    assertEquals(expectedResonse, actualResponse);
   }
 }

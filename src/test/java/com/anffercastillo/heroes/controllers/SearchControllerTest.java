@@ -52,5 +52,6 @@ public class SearchControllerTest {
   @Test
   public void searchHeroesByName_Bad_Request_Test() throws Exception {
     mockMvc.perform(get("/search")).andExpect(status().isBadRequest());
+    mockMvc.perform(get("/search?term=")).andExpect(status().isBadRequest());
   }
 }

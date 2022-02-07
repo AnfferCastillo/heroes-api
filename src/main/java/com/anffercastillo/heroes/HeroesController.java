@@ -1,8 +1,10 @@
 package com.anffercastillo.heroes;
 
+import com.anffercastillo.heroes.dto.HeroDTO;
 import com.anffercastillo.heroes.dto.SearchResponse;
 import com.anffercastillo.heroes.services.HeroesService;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,5 +26,11 @@ public class HeroesController {
     searchResponse.setResults(heroes);
 
     return searchResponse;
+  }
+
+  @GetMapping("/{id}")
+  public HeroDTO getHero(@PathVariable long id) {
+    var hero = heroesService.getHero(id);
+    return hero;
   }
 }

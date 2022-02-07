@@ -1,24 +1,19 @@
 package com.anffercastillo.heroes.services;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import com.anffercastillo.heroes.dto.HeroDTO;
+import com.anffercastillo.heroes.dto.HeroRequest;
+import com.anffercastillo.heroes.repositories.HeroesRepository;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
-import com.anffercastillo.heroes.dto.HeroDTO;
-import com.anffercastillo.heroes.dto.HeroRequest;
-import com.anffercastillo.heroes.repositories.HeroesRepository;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class HeroesServiceTest {
 

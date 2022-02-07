@@ -5,10 +5,7 @@ import com.anffercastillo.heroes.dto.SearchResponse;
 import com.anffercastillo.heroes.services.HeroesService;
 import com.anffercastillo.heroes.utils.MessagesConstants;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.NoSuchElementException;
@@ -42,5 +39,10 @@ public class HeroesController {
     } catch (NoSuchElementException e) {
       throw new ResponseStatusException(HttpStatus.NOT_FOUND, MessagesConstants.HERO_NOT_FOUND);
     }
+  }
+
+  @DeleteMapping("/{id}")
+  public void deleteHero(@PathVariable long id) {
+    heroesService.deleteHero(id);
   }
 }

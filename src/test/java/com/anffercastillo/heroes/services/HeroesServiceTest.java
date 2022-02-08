@@ -101,7 +101,7 @@ public class HeroesServiceTest {
 
     var actual = heroService.updateHero(id, heroUpdateRequest);
 
-    assertEquals(expected, actual);
+    assertEquals(HeroDTO.buildHeroDTO(expected), actual);
   }
 
   @Test

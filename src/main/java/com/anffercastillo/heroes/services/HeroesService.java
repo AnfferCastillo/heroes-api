@@ -50,12 +50,17 @@ public class HeroesService {
       throw new Exception(MessagesConstants.HERO_EMPTY_FORENAME_ERROR);
     }
 
-    var currentHero = getHero(id);
+    var currentHero =
+        heroesRepository
+            .findHeroesById(id)
+            .orElseThrow(() -> new NoSuchElementException(MessagesConstants.HERO_NOT_FOUND));
 
     currentHero.setForename(heroUpdateRequest.getForename());
     currentHero.setName(heroUpdateRequest.getName());
 
-    return heroesRepository.updateHero(currentHero);
+    var updatedHero = heroesRepository.save(currentHero);
+
+    return HeroDTO.buildHeroDTO(updatedHero);
   }
 
   public List<HeroDTO> getHeroesByName(String name) throws Exception {

@@ -4,18 +4,28 @@ import com.anffercastillo.heroes.entities.Heroes;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.transaction.Transactional;
 import java.util.List;
 
 @Repository
 @Transactional
-public class HeroRepositoryImpl implements HeroesRepositoryCustom {
+public class HeroesRepositoryImpl implements HeroesRepositoryCustom {
 
-  @PersistenceContext EntityManager entityManager;
+  // PROTECTED FOR TESTING PURPUSES
+  protected static final String QUERY_BY_NAME = "select * from heroes where name like ?";
+
+  EntityManager entityManager;
+
+  public HeroesRepositoryImpl(EntityManager entityManager) {
+    this.entityManager = entityManager;
+  }
 
   @Override
-  public List<Heroes> findHeroesByName(String string) { // TODO Auto-generated method stub
-    return null;
+  public List<Heroes> findHeroesByName(String name) {
+    Query query = entityManager.createNativeQuery(QUERY_BY_NAME, Heroes.class);
+    var parameter = new StringBuilder("%").append(name).append("%");
+    query.setParameter(1, parameter.toString());
+    return query.getResultList();
   }
 }

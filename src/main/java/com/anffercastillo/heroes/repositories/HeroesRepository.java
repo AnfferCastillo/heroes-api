@@ -1,19 +1,16 @@
 package com.anffercastillo.heroes.repositories;
 
-import java.util.List;
+import com.anffercastillo.heroes.dto.HeroDTO;
+import com.anffercastillo.heroes.entities.Heroes;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
 import java.util.Optional;
 
-import com.anffercastillo.heroes.dto.HeroDTO;
+@Repository
+public interface HeroesRepository extends JpaRepository<Heroes, Long>, HeroesRepositoryCustom {
 
-public interface HeroesRepository {
-
-  Optional<HeroDTO> getHeroeById(long id);
-
-  List<HeroDTO> getAllHeroes();
-
-  void deleteHeroById(long id);
+  Optional<Heroes> findHeroesById(long id);
 
   HeroDTO updateHero(HeroDTO hero);
-
-  List<HeroDTO> getHeroesByName(String string);
 }

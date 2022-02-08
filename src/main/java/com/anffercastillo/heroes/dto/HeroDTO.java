@@ -1,5 +1,7 @@
 package com.anffercastillo.heroes.dto;
 
+import com.anffercastillo.heroes.entities.Heroes;
+
 import java.util.Objects;
 
 public class HeroDTO {
@@ -30,6 +32,14 @@ public class HeroDTO {
 
   public void setForename(String forename) {
     this.forename = forename;
+  }
+
+  public static HeroDTO buildHeroDTO(Heroes entity) {
+    var dto = new HeroDTO();
+    dto.setName(entity.getName());
+    dto.setForename(entity.getForename());
+    dto.setId(entity.getId());
+    return dto;
   }
 
   @Override

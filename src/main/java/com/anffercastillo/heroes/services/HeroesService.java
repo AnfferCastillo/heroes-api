@@ -1,15 +1,15 @@
 package com.anffercastillo.heroes.services;
 
-import java.util.List;
-import java.util.NoSuchElementException;
-
-import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
-
 import com.anffercastillo.heroes.dto.HeroDTO;
 import com.anffercastillo.heroes.dto.HeroRequest;
 import com.anffercastillo.heroes.repositories.HeroesRepository;
 import com.anffercastillo.heroes.utils.MessagesConstants;
+import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 @Service
 public class HeroesService {
@@ -23,7 +23,7 @@ public class HeroesService {
   public HeroDTO getHero(long id) {
     // TODO: change this to a proper exception with 404
     return heroesRepository
-        .getHeroeById(id)
+        .findHeroesById(id)
         .orElseThrow(() -> new NoSuchElementException(MessagesConstants.HERO_NOT_FOUND));
   }
 
@@ -33,7 +33,7 @@ public class HeroesService {
 
   public void deleteHero(long id) {
     var hero = getHero(id);
-    heroesRepository.deleteHeroById(hero.getId());
+    heroesRepository.deleteByID(hero.getId());
   }
 
   public HeroDTO updateHero(long id, HeroRequest heroUpdateRequest) throws Exception {
@@ -60,6 +60,8 @@ public class HeroesService {
       // TODO: Change for HeroException later
       throw new Exception(MessagesConstants.HERO_EMPTY_NAME_ERROR);
     }
-    return heroesRepository.getHeroesByName(name);
+    return heroesRepository.findHeroesByName(name).stream()
+        .map(HeroDTO::buildHeroDTO)
+        .collect(Collectors.toList());
   }
 }

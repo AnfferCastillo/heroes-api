@@ -2,6 +2,7 @@ package com.anffercastillo.heroes.services;
 
 import com.anffercastillo.heroes.dto.HeroDTO;
 import com.anffercastillo.heroes.dto.HeroRequest;
+import com.anffercastillo.heroes.entities.Heroes;
 import com.anffercastillo.heroes.repositories.HeroesRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -32,7 +33,7 @@ public class HeroesServiceTest {
   public void getHeroeById_Test() {
     var id = 1L;
 
-    when(mockHeroesRepository.getHeroeById(id)).thenReturn(Optional.of(buildDummyHero(id)));
+    when(mockHeroesRepository.findHeroesById(id)).thenReturn(Optional.of(buildDummyHero(id)));
     var heroe = heroService.getHero(id);
 
     assertNotNull(heroe);
@@ -43,7 +44,7 @@ public class HeroesServiceTest {
   public void getHeroeById_Not_Found_Test() {
     var id = -1L;
 
-    when(mockHeroesRepository.getHeroeById(id)).thenThrow(new NoSuchElementException());
+    when(mockHeroesRepository.findHeroesById(id)).thenThrow(new NoSuchElementException());
     assertThrowsExactly(NoSuchElementException.class, () -> heroService.getHero(id));
   }
 
@@ -51,7 +52,7 @@ public class HeroesServiceTest {
   public void getAllHeroes_Test() {
     var dummyHero = buildDummyHero(1L);
 
-    when(mockHeroesRepository.getAllHeroes()).thenReturn(List.of(dummyHero));
+    when(mockHeroesRepository.findAll()).thenReturn(List.of(dummyHero));
     List<HeroDTO> heroes = heroService.getHeroes();
     assertEquals(1, heroes.size());
   }
@@ -63,8 +64,8 @@ public class HeroesServiceTest {
     var dummyHero2 = buildDummyHero(2L);
     var dummyHero3 = buildDummyHero(3L);
 
-    when(mockHeroesRepository.getHeroeById(id)).thenReturn(Optional.of(dummyHero1));
-    when(mockHeroesRepository.getAllHeroes()).thenReturn(List.of(dummyHero2, dummyHero3));
+    when(mockHeroesRepository.findHeroesById(id)).thenReturn(Optional.of(dummyHero1));
+    when(mockHeroesRepository.findAll()).thenReturn(List.of(dummyHero2, dummyHero3));
 
     heroService.deleteHero(id);
 
@@ -96,7 +97,7 @@ public class HeroesServiceTest {
     var dummyHero = buildDummyHero(id);
 
     when(mockHeroesRepository.updateHero(any(HeroDTO.class))).thenReturn(expected);
-    when(mockHeroesRepository.getHeroeById(id)).thenReturn(Optional.of(dummyHero));
+    when(mockHeroesRepository.findHeroesById(id)).thenReturn(Optional.of(dummyHero));
 
     var actual = heroService.updateHero(id, heroUpdateRequest);
 
@@ -110,7 +111,7 @@ public class HeroesServiceTest {
     heroUpdateRequest.setName("INVALID_UPDATED_DUMMY_NAME");
     heroUpdateRequest.setForename("INVALID_UPDATED_ANOTHER_DUMMY_NAM");
 
-    when(mockHeroesRepository.getHeroeById(id)).thenThrow(new NoSuchElementException());
+    when(mockHeroesRepository.findHeroesById(id)).thenThrow(new NoSuchElementException());
 
     assertThrows(NoSuchElementException.class, () -> heroService.updateHero(id, heroUpdateRequest));
   }
@@ -122,7 +123,7 @@ public class HeroesServiceTest {
     heroUpdateRequest.setName("");
     heroUpdateRequest.setForename("INVALID_UPDATED_ANOTHER_DUMMY_NAM");
 
-    when(mockHeroesRepository.getHeroeById(id)).thenThrow(new NoSuchElementException());
+    when(mockHeroesRepository.findHeroesById(id)).thenThrow(new NoSuchElementException());
 
     assertThrows(Exception.class, () -> heroService.updateHero(id, heroUpdateRequest));
   }
@@ -133,7 +134,7 @@ public class HeroesServiceTest {
     var dummyHero2 = buildDummyHero(2L);
     var dummyHero3 = buildDummyHero(3L);
 
-    when(mockHeroesRepository.getHeroesByName("DUMMY"))
+    when(mockHeroesRepository.findHeroesByName("DUMMY"))
         .thenReturn(List.of(dummyHero1, dummyHero2, dummyHero3));
 
     List<HeroDTO> heroes = heroService.getHeroesByName("DUMMY");
@@ -149,8 +150,8 @@ public class HeroesServiceTest {
     assertThrows(Exception.class, () -> heroService.getHeroesByName(""));
   }
 
-  private HeroDTO buildDummyHero(long id) {
-    var dummyHero = new HeroDTO();
+  private Heroes buildDummyHero(long id) {
+    var dummyHero = new Heroes();
     dummyHero.setId(id);
     dummyHero.setName("DUMMY_NAME_" + id);
     dummyHero.setForename("ANOTHER_DUMMY_NAME_" + id);

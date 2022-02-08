@@ -89,14 +89,14 @@ public class HeroesServiceTest {
     heroUpdateRequest.setName("UPDATED_DUMMY_NAME");
     heroUpdateRequest.setForename("UPDATED_ANOTHER_DUMMY_NAM");
 
-    var expected = new HeroDTO();
+    var expected = new Heroes();
     expected.setName("UPDATED_DUMMY_NAME");
     expected.setForename("UPDATED_ANOTHER_DUMMY_NAM");
     expected.setId(1L);
 
     var dummyHero = buildDummyHero(id);
 
-    when(mockHeroesRepository.updateHero(any(HeroDTO.class))).thenReturn(expected);
+    when(mockHeroesRepository.save(any(Heroes.class))).thenReturn(expected);
     when(mockHeroesRepository.findHeroesById(id)).thenReturn(Optional.of(dummyHero));
 
     var actual = heroService.updateHero(id, heroUpdateRequest);
@@ -140,9 +140,9 @@ public class HeroesServiceTest {
     List<HeroDTO> heroes = heroService.getHeroesByName("DUMMY");
 
     assertEquals(3, heroes.size());
-    assertEquals(dummyHero1, heroes.get(0));
-    assertEquals(dummyHero2, heroes.get(1));
-    assertEquals(dummyHero3, heroes.get(2));
+    assertEquals(dummyHero1.getName(), heroes.get(0).getName());
+    assertEquals(dummyHero2.getName(), heroes.get(1).getName());
+    assertEquals(dummyHero3.getName(), heroes.get(2).getName());
   }
 
   @Test

@@ -24,16 +24,19 @@ public class HeroesService {
     // TODO: change this to a proper exception with 404
     return heroesRepository
         .findHeroesById(id)
+        .map(HeroDTO::buildHeroDTO)
         .orElseThrow(() -> new NoSuchElementException(MessagesConstants.HERO_NOT_FOUND));
   }
 
   public List<HeroDTO> getHeroes() {
-    return heroesRepository.getAllHeroes();
+    return heroesRepository.findAll().stream()
+        .map(HeroDTO::buildHeroDTO)
+        .collect(Collectors.toList());
   }
 
   public void deleteHero(long id) {
     var hero = getHero(id);
-    heroesRepository.deleteByID(hero.getId());
+    heroesRepository.deleteById(hero.getId());
   }
 
   public HeroDTO updateHero(long id, HeroRequest heroUpdateRequest) throws Exception {

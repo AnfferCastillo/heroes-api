@@ -134,3 +134,14 @@ insert into heroes_super_powers (id, hero_id, super_power_id) values (78, 13, 12
 insert into heroes_super_powers (id, hero_id, super_power_id) values (79, 14, 14);
 insert into heroes_super_powers (id, hero_id, super_power_id) values (80, 20, 7);
 
+-- USERS
+create table users (
+	id INT,
+	username VARCHAR(15),
+	password VARCHAR(15),
+	roles varchar(50)
+);
+
+insert into users (id, username, password, roles) values (1, 'user1', 'testing', 'ADMIN');
+insert into users (id, username, password, roles) values (2, 'user2', 'testing', 'USER');
+

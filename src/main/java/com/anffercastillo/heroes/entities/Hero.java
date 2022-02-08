@@ -4,7 +4,8 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-public class Heroes {
+@Table(name = "HEROES")
+public class Hero {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)

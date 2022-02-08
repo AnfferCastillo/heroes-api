@@ -1,10 +1,10 @@
 package com.anffercastillo.heroes.repositories;
 
-import com.anffercastillo.heroes.entities.Heroes;
+import com.anffercastillo.heroes.entities.Hero;
 
 import java.util.List;
 
 public interface HeroesRepositoryCustom {
 
-  List<Heroes> findHeroesByName(String name);
+  List<Hero> findHeroesByName(String name);
 }

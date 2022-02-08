@@ -2,7 +2,7 @@ package com.anffercastillo.heroes.services;
 
 import com.anffercastillo.heroes.dto.HeroDTO;
 import com.anffercastillo.heroes.dto.HeroRequest;
-import com.anffercastillo.heroes.entities.Heroes;
+import com.anffercastillo.heroes.entities.Hero;
 import com.anffercastillo.heroes.repositories.HeroesRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -90,14 +90,14 @@ public class HeroesServiceTest {
     heroUpdateRequest.setName("UPDATED_DUMMY_NAME");
     heroUpdateRequest.setForename("UPDATED_ANOTHER_DUMMY_NAM");
 
-    var expected = new Heroes();
+    var expected = new Hero();
     expected.setName("UPDATED_DUMMY_NAME");
     expected.setForename("UPDATED_ANOTHER_DUMMY_NAM");
     expected.setId(1L);
 
     var dummyHero = buildDummyHeroEntity(id);
 
-    when(mockHeroesRepository.save(any(Heroes.class))).thenReturn(expected);
+    when(mockHeroesRepository.save(any(Hero.class))).thenReturn(expected);
     when(mockHeroesRepository.findHeroesById(id)).thenReturn(Optional.of(dummyHero));
 
     var actual = heroService.updateHero(id, heroUpdateRequest);

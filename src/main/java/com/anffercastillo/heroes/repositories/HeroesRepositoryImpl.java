@@ -1,6 +1,6 @@
 package com.anffercastillo.heroes.repositories;
 
-import com.anffercastillo.heroes.entities.Heroes;
+import com.anffercastillo.heroes.entities.Hero;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -22,8 +22,8 @@ public class HeroesRepositoryImpl implements HeroesRepositoryCustom {
   }
 
   @Override
-  public List<Heroes> findHeroesByName(String name) {
-    Query query = entityManager.createNativeQuery(QUERY_BY_NAME, Heroes.class);
+  public List<Hero> findHeroesByName(String name) {
+    Query query = entityManager.createNativeQuery(QUERY_BY_NAME, Hero.class);
     var parameter = new StringBuilder("%").append(name).append("%");
     query.setParameter(1, parameter.toString());
     return query.getResultList();

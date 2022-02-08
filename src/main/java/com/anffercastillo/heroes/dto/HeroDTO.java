@@ -1,6 +1,6 @@
 package com.anffercastillo.heroes.dto;
 
-import com.anffercastillo.heroes.entities.Heroes;
+import com.anffercastillo.heroes.entities.Hero;
 
 import java.util.Objects;
 
@@ -34,7 +34,7 @@ public class HeroDTO {
     this.forename = forename;
   }
 
-  public static HeroDTO buildHeroDTO(Heroes entity) {
+  public static HeroDTO buildHeroDTO(Hero entity) {
     var dto = new HeroDTO();
     dto.setName(entity.getName());
     dto.setForename(entity.getForename());

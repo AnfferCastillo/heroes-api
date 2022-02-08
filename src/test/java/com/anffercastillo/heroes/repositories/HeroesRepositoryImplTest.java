@@ -1,6 +1,6 @@
 package com.anffercastillo.heroes.repositories;
 
-import com.anffercastillo.heroes.entities.Heroes;
+import com.anffercastillo.heroes.entities.Hero;
 import com.anffercastillo.heroes.utils.HeroTestsUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -36,14 +36,14 @@ public class HeroesRepositoryImplTest {
 
     var expected = List.of(dummyHero, dummyHero2);
 
-    when(mockEntityManager.createNativeQuery(HeroesRepositoryImpl.QUERY_BY_NAME, Heroes.class))
+    when(mockEntityManager.createNativeQuery(HeroesRepositoryImpl.QUERY_BY_NAME, Hero.class))
         .thenReturn(mockQuery);
     when(mockQuery.getResultList()).thenReturn(List.of(dummyHero, dummyHero2));
 
     var actual = heroesRepository.findHeroesByName(name);
 
     verify(mockEntityManager, times(1))
-        .createNativeQuery(HeroesRepositoryImpl.QUERY_BY_NAME, Heroes.class);
+        .createNativeQuery(HeroesRepositoryImpl.QUERY_BY_NAME, Hero.class);
     verify(mockQuery, times(1)).getResultList();
 
     assertEquals(expected.size(), actual.size());

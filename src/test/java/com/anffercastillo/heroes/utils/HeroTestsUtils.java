@@ -1,6 +1,7 @@
 package com.anffercastillo.heroes.utils;
 
 import com.anffercastillo.heroes.dto.HeroDTO;
+import com.anffercastillo.heroes.entities.Heroes;
 
 public class HeroTestsUtils {
 
@@ -12,6 +13,14 @@ public class HeroTestsUtils {
     dummyHero.setForename(DUMMY_FORENAME + id);
     dummyHero.setName(DUMMY_NAME + id);
     dummyHero.setId(id);
+    return dummyHero;
+  }
+
+  public static Heroes buildDummyHeroEntity(long id) {
+    var dummyHero = new Heroes();
+    dummyHero.setId(id);
+    dummyHero.setName("DUMMY_NAME_" + id);
+    dummyHero.setForename("ANOTHER_DUMMY_NAME_" + id);
     return dummyHero;
   }
 }

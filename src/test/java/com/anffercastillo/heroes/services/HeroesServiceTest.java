@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
+import static com.anffercastillo.heroes.utils.HeroTestsUtils.buildDummyHeroEntity;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
@@ -33,7 +34,7 @@ public class HeroesServiceTest {
   public void getHeroeById_Test() {
     var id = 1L;
 
-    when(mockHeroesRepository.findHeroesById(id)).thenReturn(Optional.of(buildDummyHero(id)));
+    when(mockHeroesRepository.findHeroesById(id)).thenReturn(Optional.of(buildDummyHeroEntity(id)));
     var heroe = heroService.getHero(id);
 
     assertNotNull(heroe);
@@ -50,7 +51,7 @@ public class HeroesServiceTest {
 
   @Test
   public void getAllHeroes_Test() {
-    var dummyHero = buildDummyHero(1L);
+    var dummyHero = buildDummyHeroEntity(1L);
 
     when(mockHeroesRepository.findAll()).thenReturn(List.of(dummyHero));
     List<HeroDTO> heroes = heroService.getHeroes();
@@ -60,9 +61,9 @@ public class HeroesServiceTest {
   @Test
   public void deleteById_Test() {
     var id = 1L;
-    var dummyHero1 = buildDummyHero(1L);
-    var dummyHero2 = buildDummyHero(2L);
-    var dummyHero3 = buildDummyHero(3L);
+    var dummyHero1 = buildDummyHeroEntity(1L);
+    var dummyHero2 = buildDummyHeroEntity(2L);
+    var dummyHero3 = buildDummyHeroEntity(3L);
 
     when(mockHeroesRepository.findHeroesById(id)).thenReturn(Optional.of(dummyHero1));
     when(mockHeroesRepository.findAll()).thenReturn(List.of(dummyHero2, dummyHero3));
@@ -94,7 +95,7 @@ public class HeroesServiceTest {
     expected.setForename("UPDATED_ANOTHER_DUMMY_NAM");
     expected.setId(1L);
 
-    var dummyHero = buildDummyHero(id);
+    var dummyHero = buildDummyHeroEntity(id);
 
     when(mockHeroesRepository.save(any(Heroes.class))).thenReturn(expected);
     when(mockHeroesRepository.findHeroesById(id)).thenReturn(Optional.of(dummyHero));
@@ -130,9 +131,9 @@ public class HeroesServiceTest {
 
   @Test
   public void getHeroesByName_Test() throws Exception {
-    var dummyHero1 = buildDummyHero(1L);
-    var dummyHero2 = buildDummyHero(2L);
-    var dummyHero3 = buildDummyHero(3L);
+    var dummyHero1 = buildDummyHeroEntity(1L);
+    var dummyHero2 = buildDummyHeroEntity(2L);
+    var dummyHero3 = buildDummyHeroEntity(3L);
 
     when(mockHeroesRepository.findHeroesByName("DUMMY"))
         .thenReturn(List.of(dummyHero1, dummyHero2, dummyHero3));
@@ -148,13 +149,5 @@ public class HeroesServiceTest {
   @Test
   public void getHeroesByName_Fail_Test() {
     assertThrows(Exception.class, () -> heroService.getHeroesByName(""));
-  }
-
-  private Heroes buildDummyHero(long id) {
-    var dummyHero = new Heroes();
-    dummyHero.setId(id);
-    dummyHero.setName("DUMMY_NAME_" + id);
-    dummyHero.setForename("ANOTHER_DUMMY_NAME_" + id);
-    return dummyHero;
   }
 }

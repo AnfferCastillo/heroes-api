@@ -1,11 +1,14 @@
 package com.anffercastillo.heroes.entities;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 public class Heroes {
 
-  @Id private long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  private long id;
 
   @Column private String name;
 
@@ -14,6 +17,13 @@ public class Heroes {
   @Column
   @Enumerated(EnumType.STRING)
   private HeroesCompany company;
+
+  @ManyToMany
+  @JoinTable(
+      name = "heroes_super_powers",
+      joinColumns = @JoinColumn(name = "hero_id"),
+      inverseJoinColumns = @JoinColumn(name = "super_power_id"))
+  private List<SuperPowers> list;
 
   public HeroesCompany getCompany() {
     return company;

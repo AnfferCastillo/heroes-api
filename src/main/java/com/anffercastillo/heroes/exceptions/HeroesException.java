@@ -1,4 +1,4 @@
-package com.anffercastillo.heroes;
+package com.anffercastillo.heroes.exceptions;
 
 public class HeroesException extends Exception {
 

@@ -18,11 +18,11 @@ import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import com.anffercastillo.heroes.HeroesException;
 import com.anffercastillo.heroes.dto.HeroDTO;
 import com.anffercastillo.heroes.dto.HeroRequest;
 import com.anffercastillo.heroes.entities.Hero;
 import com.anffercastillo.heroes.entities.HeroesCompany;
+import com.anffercastillo.heroes.exceptions.HeroesException;
 import com.anffercastillo.heroes.repositories.HeroesRepository;
 import com.anffercastillo.heroes.utils.MessagesConstants;
 

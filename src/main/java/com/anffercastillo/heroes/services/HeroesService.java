@@ -10,9 +10,9 @@ import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import com.anffercastillo.heroes.HeroesException;
 import com.anffercastillo.heroes.dto.HeroDTO;
 import com.anffercastillo.heroes.dto.HeroRequest;
+import com.anffercastillo.heroes.exceptions.HeroesException;
 import com.anffercastillo.heroes.repositories.HeroesRepository;
 import com.anffercastillo.heroes.utils.MessagesConstants;
 

@@ -10,6 +10,7 @@ import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import com.anffercastillo.heroes.HeroesException;
 import com.anffercastillo.heroes.dto.HeroDTO;
 import com.anffercastillo.heroes.dto.HeroRequest;
 import com.anffercastillo.heroes.repositories.HeroesRepository;
@@ -25,11 +26,11 @@ public class HeroesService {
   }
 
   @Cacheable(value = "heroes", key = "#a0")
-  public HeroDTO getHero(long id) {
+  public HeroDTO getHero(long id) throws HeroesException {
     return heroesRepository
         .findHeroesById(id)
         .map(HeroDTO::buildHeroDTO)
-        .orElseThrow(() -> new NoSuchElementException(MessagesConstants.HERO_NOT_FOUND));
+        .orElseThrow(() -> new HeroesException(MessagesConstants.HERO_NOT_FOUND));
   }
 
   @Cacheable("search")

@@ -38,7 +38,7 @@ public class HeroesServiceTest {
   }
 
   @Test
-  public void getHeroeById_Test() {
+  public void getHeroeById_Test() throws HeroesException {
     var id = 1L;
 
     when(mockHeroesRepository.findHeroesById(id)).thenReturn(Optional.of(buildDummyHeroEntity(id)));

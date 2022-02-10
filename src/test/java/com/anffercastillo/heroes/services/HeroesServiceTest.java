@@ -7,11 +7,12 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -124,9 +125,12 @@ public class HeroesServiceTest {
     heroUpdateRequest.setName("INVALID_UPDATED_DUMMY_NAME");
     heroUpdateRequest.setForename("INVALID_UPDATED_ANOTHER_DUMMY_NAM");
 
-    when(mockHeroesRepository.findHeroesById(id)).thenThrow(new NoSuchElementException());
+    when(mockHeroesRepository.findHeroesById(id)).thenReturn(Optional.empty());
 
-    assertThrows(NoSuchElementException.class, () -> heroService.updateHero(id, heroUpdateRequest));
+    assertThrows(
+        HeroesException.class,
+        () -> heroService.updateHero(id, heroUpdateRequest),
+        MessagesConstants.HERO_EMPTY_NAME_ERROR);
   }
 
   @Test
@@ -136,9 +140,13 @@ public class HeroesServiceTest {
     heroUpdateRequest.setName("");
     heroUpdateRequest.setForename("INVALID_UPDATED_ANOTHER_DUMMY_NAM");
 
-    when(mockHeroesRepository.findHeroesById(id)).thenThrow(new NoSuchElementException());
+    assertThrows(
+        HeroesException.class,
+        () -> heroService.updateHero(id, heroUpdateRequest),
+        MessagesConstants.HERO_EMPTY_NAME_ERROR);
 
-    assertThrows(Exception.class, () -> heroService.updateHero(id, heroUpdateRequest));
+    verify(mockHeroesRepository, times(0)).findHeroesById(id);
+    verify(mockHeroesRepository, times(0)).save(any());
   }
 
   @Test

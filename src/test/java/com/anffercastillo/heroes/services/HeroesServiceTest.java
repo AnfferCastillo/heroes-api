@@ -143,7 +143,7 @@ public class HeroesServiceTest {
     assertThrows(
         HeroesException.class,
         () -> heroService.updateHero(id, heroUpdateRequest),
-        MessagesConstants.HERO_EMPTY_NAME_ERROR);
+        MessagesConstants.INVALID_HERO_UPDATE_REQUEST);
 
     verify(mockHeroesRepository, times(0)).findHeroesById(id);
     verify(mockHeroesRepository, times(0)).save(any());

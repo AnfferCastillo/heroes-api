@@ -37,6 +37,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @SpringBootTest
 public class HeroesControllerTest {
 
+  private static final String SOME_FORENAME = "SOME_FORENAME";
+
+  private static final String SOME_NAME = "SOME_NAME";
+
   public static final long ID = 1L;
 
   @Autowired private WebApplicationContext context;
@@ -184,7 +188,7 @@ public class HeroesControllerTest {
       username = "admin",
       roles = {"ADMIN"})
   public void updateHeroById_Not_Found_Test() throws Exception {
-    var heroRequest = buildHeroRequest("SOME_FORENAME", "SOME_NAME");
+    var heroRequest = buildHeroRequest(SOME_FORENAME, SOME_NAME);
     when(mockHeroService.updateHero(eq(ID), any())).thenThrow(new NoSuchElementException());
 
     mockMvc
@@ -201,7 +205,11 @@ public class HeroesControllerTest {
   @WithMockUser(username = "regularUser")
   public void updateHeroById_Forbbiden_Test() throws Exception {
     mockMvc
-        .perform(put("/heroes/" + ID).contentType(MediaType.APPLICATION_JSON).content(""))
+        .perform(
+            put("/heroes/" + ID)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(
+                    objectMapper.writeValueAsBytes(buildHeroRequest(SOME_FORENAME, SOME_NAME))))
         .andExpect(status().isForbidden());
   }
 
@@ -209,7 +217,11 @@ public class HeroesControllerTest {
   @WithAnonymousUser
   public void updateHeroById_Unauthorized_test() throws Exception {
     mockMvc
-        .perform(put("/heroes/" + ID).contentType(MediaType.APPLICATION_JSON).content(""))
+        .perform(
+            put("/heroes/" + ID)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(
+                    objectMapper.writeValueAsBytes(buildHeroRequest(SOME_FORENAME, SOME_NAME))))
         .andExpect(status().isUnauthorized());
   }
 

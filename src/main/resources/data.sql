@@ -1,4 +1,4 @@
-create table heroes (
+create table if not exists heroes (
 	id INT,
 	name VARCHAR(50),
 	forename VARCHAR(50),
@@ -27,7 +27,7 @@ insert into heroes (id, name, forename, company) values (19, 'Mead', 'Mead Stick
 insert into heroes (id, name, forename, company) values (20, 'Bobbe', 'Bobbe Webberley', 'MARVEL');
 
 -- SUPER POWERS
-create table super_powers (
+create table if not exists super_powers (
     id INT,
     name VARCHAR(50)
 );
@@ -48,7 +48,7 @@ insert into super_powers (id, name) values (14, 'vision de rayos x');
 insert into super_powers (id, name) values (15, 'riqueza');
 
 -- HEROES SUPER POWERS
-create table heroes_super_powers (
+create table if not exists heroes_super_powers (
 	id INT,
 	hero_id INT,
 	super_power_id INT
@@ -135,7 +135,7 @@ insert into heroes_super_powers (id, hero_id, super_power_id) values (79, 14, 14
 insert into heroes_super_powers (id, hero_id, super_power_id) values (80, 20, 7);
 
 -- USERS
-create table users (
+create table if not exists users (
 	id INT,
 	username VARCHAR(15),
 	password VARCHAR(15),

@@ -1,21 +1,27 @@
 package com.anffercastillo.heroes.services;
 
-import com.anffercastillo.heroes.dto.HeroDTO;
-import com.anffercastillo.heroes.dto.HeroRequest;
-import com.anffercastillo.heroes.entities.Hero;
-import com.anffercastillo.heroes.repositories.HeroesRepository;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import static com.anffercastillo.heroes.utils.HeroTestsUtils.buildDummyHeroEntity;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
-import static com.anffercastillo.heroes.utils.HeroTestsUtils.buildDummyHeroEntity;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import com.anffercastillo.heroes.dto.HeroDTO;
+import com.anffercastillo.heroes.dto.HeroRequest;
+import com.anffercastillo.heroes.entities.Hero;
+import com.anffercastillo.heroes.repositories.HeroesRepository;
 
 public class HeroesServiceTest {
 
@@ -84,11 +90,12 @@ public class HeroesServiceTest {
 
   @Test
   public void updateHero_Test() throws Exception {
-
     var id = 1L;
     var heroUpdateRequest = new HeroRequest();
     heroUpdateRequest.setName("UPDATED_DUMMY_NAME");
     heroUpdateRequest.setForename("UPDATED_ANOTHER_DUMMY_NAM");
+    heroUpdateRequest.setSuperPowers(Collections.emptyList());
+    heroUpdateRequest.setCompany("MARVEL");
 
     var expected = new Hero();
     expected.setName("UPDATED_DUMMY_NAME");

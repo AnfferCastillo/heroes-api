@@ -1,7 +1,18 @@
 package com.anffercastillo.heroes.entities;
 
-import javax.persistence.*;
 import java.util.List;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "HEROES")
@@ -24,7 +35,7 @@ public class Hero {
       name = "heroes_super_powers",
       joinColumns = @JoinColumn(name = "hero_id"),
       inverseJoinColumns = @JoinColumn(name = "super_power_id"))
-  private List<SuperPowers> list;
+  private List<SuperPowers> superPowers;
 
   public HeroesCompany getCompany() {
     return company;
@@ -56,5 +67,13 @@ public class Hero {
 
   public void setForename(String forename) {
     this.forename = forename;
+  }
+
+  public List<SuperPowers> getSuperPowers() {
+    return superPowers;
+  }
+
+  public void setSuperPowers(List<SuperPowers> superPowers) {
+    this.superPowers = superPowers;
   }
 }

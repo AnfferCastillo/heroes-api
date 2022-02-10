@@ -1,14 +1,27 @@
 package com.anffercastillo.heroes.dto;
 
-import com.anffercastillo.heroes.entities.Hero;
-
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
+
+import com.anffercastillo.heroes.entities.Hero;
+import com.anffercastillo.heroes.entities.SuperPowers;
 
 public class HeroDTO {
 
   private long id;
   private String name;
   private String forename;
+  private List<String> superPowers;
+  private String compay;
+
+  public String getCompay() {
+    return compay;
+  }
+
+  public void setCompay(String compay) {
+    this.compay = compay;
+  }
 
   public long getId() {
     return id;
@@ -34,11 +47,22 @@ public class HeroDTO {
     this.forename = forename;
   }
 
+  public List<String> getSuperPowers() {
+    return superPowers;
+  }
+
+  public void setSuperPowers(List<String> superPowers) {
+    this.superPowers = superPowers;
+  }
+
   public static HeroDTO buildHeroDTO(Hero entity) {
     var dto = new HeroDTO();
     dto.setName(entity.getName());
     dto.setForename(entity.getForename());
     dto.setId(entity.getId());
+    dto.setCompay(entity.getCompany().name());
+    dto.setSuperPowers(
+        entity.getSuperPowers().stream().map(SuperPowers::getName).collect(Collectors.toList()));
     return dto;
   }
 

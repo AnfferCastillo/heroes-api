@@ -142,6 +142,6 @@ create table users (
 	roles varchar(50)
 );
 
-insert into users (id, username, password, roles) values (1, 'user1', 'testing', 'ADMIN');
-insert into users (id, username, password, roles) values (2, 'user2', 'testing', 'USER');
+insert into users (id, username, password, roles) values (1, 'user1', 'testing', 'ROLE_ADMIN');
+insert into users (id, username, password, roles) values (2, 'user2', 'testing', 'ROLE_USER');
 

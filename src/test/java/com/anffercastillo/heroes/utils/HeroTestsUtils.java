@@ -1,7 +1,10 @@
 package com.anffercastillo.heroes.utils;
 
+import java.util.Collections;
+
 import com.anffercastillo.heroes.dto.HeroDTO;
 import com.anffercastillo.heroes.entities.Hero;
+import com.anffercastillo.heroes.entities.HeroesCompany;
 
 public class HeroTestsUtils {
 
@@ -21,6 +24,8 @@ public class HeroTestsUtils {
     dummyHero.setId(id);
     dummyHero.setName("DUMMY_NAME_" + id);
     dummyHero.setForename("ANOTHER_DUMMY_NAME_" + id);
+    dummyHero.setCompany(HeroesCompany.MARVEL);
+    dummyHero.setSuperPowers(Collections.emptyList());
     return dummyHero;
   }
 }

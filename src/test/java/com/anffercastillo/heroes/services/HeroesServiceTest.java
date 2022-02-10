@@ -21,6 +21,7 @@ import org.junit.jupiter.api.Test;
 import com.anffercastillo.heroes.dto.HeroDTO;
 import com.anffercastillo.heroes.dto.HeroRequest;
 import com.anffercastillo.heroes.entities.Hero;
+import com.anffercastillo.heroes.entities.HeroesCompany;
 import com.anffercastillo.heroes.repositories.HeroesRepository;
 
 public class HeroesServiceTest {
@@ -95,11 +96,13 @@ public class HeroesServiceTest {
     heroUpdateRequest.setName("UPDATED_DUMMY_NAME");
     heroUpdateRequest.setForename("UPDATED_ANOTHER_DUMMY_NAM");
     heroUpdateRequest.setSuperPowers(Collections.emptyList());
-    heroUpdateRequest.setCompany("MARVEL");
+    heroUpdateRequest.setCompany(HeroesCompany.MARVEL);
 
     var expected = new Hero();
     expected.setName("UPDATED_DUMMY_NAME");
     expected.setForename("UPDATED_ANOTHER_DUMMY_NAM");
+    expected.setSuperPowers(Collections.emptyList());
+    expected.setCompany(HeroesCompany.MARVEL);
     expected.setId(1L);
 
     var dummyHero = buildDummyHeroEntity(id);

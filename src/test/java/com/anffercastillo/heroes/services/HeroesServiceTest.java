@@ -67,7 +67,7 @@ public class HeroesServiceTest {
   }
 
   @Test
-  public void deleteById_Test() {
+  public void deleteById_Test() throws HeroesException {
     var id = 1L;
     var dummyHero1 = buildDummyHeroEntity(1L);
     var dummyHero2 = buildDummyHeroEntity(2L);
@@ -87,7 +87,8 @@ public class HeroesServiceTest {
 
   @Test
   public void deleteById_Fail_Test() {
-    assertThrows(NoSuchElementException.class, () -> heroService.deleteHero(-1L));
+    assertThrows(
+        HeroesException.class, () -> heroService.deleteHero(-1L), MessagesConstants.HERO_NOT_FOUND);
   }
 
   @Test

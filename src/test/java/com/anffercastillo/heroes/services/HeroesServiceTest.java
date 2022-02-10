@@ -168,6 +168,9 @@ public class HeroesServiceTest {
 
   @Test
   public void getHeroesByName_Fail_Test() {
-    assertThrows(Exception.class, () -> heroService.getHeroesByName(""));
+    assertThrows(
+        HeroesException.class,
+        () -> heroService.getHeroesByName(""),
+        MessagesConstants.HERO_EMPTY_NAME_ERROR);
   }
 }

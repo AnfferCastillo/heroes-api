@@ -72,10 +72,9 @@ public class HeroesService {
   }
 
   @Cacheable(value = "search", key = "#a0")
-  public List<HeroDTO> getHeroesByName(String name) throws Exception {
+  public List<HeroDTO> getHeroesByName(String name) throws HeroesException {
     if (!StringUtils.hasLength(name)) {
-      // TODO: Change for HeroException later
-      throw new Exception(MessagesConstants.HERO_EMPTY_NAME_ERROR);
+      throw new HeroesException(MessagesConstants.HERO_EMPTY_NAME_ERROR);
     }
     return heroesRepository.findHeroesByName(name).stream()
         .map(HeroDTO::buildHeroDTO)

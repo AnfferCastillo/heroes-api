@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.anffercastillo.heroes.aspects.Measure;
 import com.anffercastillo.heroes.dto.HeroDTO;
 import com.anffercastillo.heroes.dto.HeroRequest;
 import com.anffercastillo.heroes.dto.SearchResponse;
@@ -30,6 +31,7 @@ public class HeroesController {
   }
 
   @GetMapping
+  @Measure
   public SearchResponse getHeroes() {
     var heroes = heroesService.getHeroes();
     // TODO: move to a factory method

@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -33,7 +32,6 @@ public class HeroesServiceTest {
   @BeforeEach
   public void setUp() {
     mockHeroesRepository = mock(HeroesRepository.class);
-
     heroService = new HeroesService(mockHeroesRepository);
   }
 
@@ -53,7 +51,7 @@ public class HeroesServiceTest {
     var id = -1L;
 
     when(mockHeroesRepository.findHeroesById(id)).thenThrow(new NoSuchElementException());
-    assertThrowsExactly(NoSuchElementException.class, () -> heroService.getHero(id));
+    assertThrows(HeroesException.class, () -> heroService.getHero(id));
   }
 
   @Test

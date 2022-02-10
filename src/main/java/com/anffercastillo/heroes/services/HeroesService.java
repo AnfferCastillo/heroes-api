@@ -56,15 +56,7 @@ public class HeroesService {
         @CacheEvict(value = "search", allEntries = true)
       })
   public HeroDTO updateHero(long id, HeroRequest heroUpdateRequest) throws Exception {
-    if (!StringUtils.hasLength(heroUpdateRequest.getName())) {
-      // TODO: Change for HeroException later
-      throw new Exception(MessagesConstants.HERO_EMPTY_NAME_ERROR);
-    }
-
-    if (!StringUtils.hasLength(heroUpdateRequest.getForename())) {
-      // TODO: Change for HeroException later
-      throw new Exception(MessagesConstants.HERO_EMPTY_FORENAME_ERROR);
-    }
+    validateHeroRequest(heroUpdateRequest);
 
     var currentHero =
         heroesRepository
@@ -88,5 +80,17 @@ public class HeroesService {
     return heroesRepository.findHeroesByName(name).stream()
         .map(HeroDTO::buildHeroDTO)
         .collect(Collectors.toList());
+  }
+
+  private void validateHeroRequest(HeroRequest heroUpdateRequest) throws HeroesException {
+    var isInvalid =
+        !StringUtils.hasLength(heroUpdateRequest.getName())
+            || !StringUtils.hasLength(heroUpdateRequest.getForename())
+            || (heroUpdateRequest.getSuperPowers() == null)
+            || (heroUpdateRequest.getCompany() == null);
+
+    if (isInvalid) {
+      throw new HeroesException(MessagesConstants.INVALID_HERO_UPDATE_REQUEST);
+    }
   }
 }

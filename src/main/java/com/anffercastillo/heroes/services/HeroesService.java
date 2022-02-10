@@ -45,7 +45,7 @@ public class HeroesService {
         @CacheEvict(value = "heores", key = "#a0"),
         @CacheEvict(value = "search", allEntries = true)
       })
-  public void deleteHero(long id) {
+  public void deleteHero(long id) throws HeroesException {
     var hero = getHero(id);
     heroesRepository.deleteById(hero.getId());
   }

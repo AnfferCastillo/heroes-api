@@ -1,6 +1,8 @@
 package com.anffercastillo.heroes.configuration;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -13,16 +15,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
+  @Autowired AuthenticationProvider customAuthenticationProvider;
+
   @Override
   protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-    auth.inMemoryAuthentication()
-        .withUser("admin")
-        .password("admin")
-        .roles("ADMIN")
-        .and()
-        .withUser("noadmin")
-        .password("123456")
-        .roles("USER");
+    auth.authenticationProvider(customAuthenticationProvider);
   }
 
   @Override

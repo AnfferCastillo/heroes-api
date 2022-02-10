@@ -17,11 +17,13 @@ import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import com.anffercastillo.heroes.HeroesException;
 import com.anffercastillo.heroes.dto.HeroDTO;
 import com.anffercastillo.heroes.dto.HeroRequest;
 import com.anffercastillo.heroes.entities.Hero;
 import com.anffercastillo.heroes.entities.HeroesCompany;
 import com.anffercastillo.heroes.repositories.HeroesRepository;
+import com.anffercastillo.heroes.utils.MessagesConstants;
 
 public class HeroesServiceTest {
 
@@ -50,8 +52,9 @@ public class HeroesServiceTest {
   public void getHeroeById_Not_Found_Test() {
     var id = -1L;
 
-    when(mockHeroesRepository.findHeroesById(id)).thenThrow(new NoSuchElementException());
-    assertThrows(HeroesException.class, () -> heroService.getHero(id));
+    when(mockHeroesRepository.findHeroesById(id)).thenReturn(Optional.empty());
+    assertThrows(
+        HeroesException.class, () -> heroService.getHero(id), MessagesConstants.HERO_NOT_FOUND);
   }
 
   @Test

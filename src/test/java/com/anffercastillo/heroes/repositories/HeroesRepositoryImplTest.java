@@ -1,50 +1,53 @@
 package com.anffercastillo.heroes.repositories;
 
-import com.anffercastillo.heroes.entities.Hero;
-import com.anffercastillo.heroes.utils.HeroTestsUtils;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
+import java.util.List;
+import java.util.Map;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.*;
+import com.anffercastillo.heroes.dto.HeroRowMapper;
+import com.anffercastillo.heroes.utils.HeroTestsUtils;
 
 public class HeroesRepositoryImplTest {
 
   private HeroesRepositoryImpl heroesRepository;
 
-  private EntityManager mockEntityManager;
+  private NamedParameterJdbcTemplate mockJdbcTemplate;
 
-  private Query mockQuery;
+  private SuperPowerRepository mockSuperPowersRepository;
 
   @BeforeEach
   public void setup() {
-    mockEntityManager = mock(EntityManager.class);
-    mockQuery = mock(Query.class);
-    heroesRepository = new HeroesRepositoryImpl(mockEntityManager);
+    mockJdbcTemplate = mock(NamedParameterJdbcTemplate.class);
+    mockSuperPowersRepository = mock(SuperPowerRepository.class);
+
+    heroesRepository = new HeroesRepositoryImpl(mockJdbcTemplate, mockSuperPowersRepository);
   }
 
+  @SuppressWarnings("unchecked")
   @Test
   public void findHeroesByName_Test() {
     var name = "DUMMY";
 
-    var dummyHero = HeroTestsUtils.buildDummyHeroEntity(1L);
-    var dummyHero2 = HeroTestsUtils.buildDummyHeroEntity(2L);
+    var dummyHero = HeroTestsUtils.buildDummyHero(1L);
+    var dummyHero2 = HeroTestsUtils.buildDummyHero(2L);
 
     var expected = List.of(dummyHero, dummyHero2);
 
-    when(mockEntityManager.createNativeQuery(HeroesRepositoryImpl.QUERY_BY_NAME, Hero.class))
-        .thenReturn(mockQuery);
-    when(mockQuery.getResultList()).thenReturn(List.of(dummyHero, dummyHero2));
+    when(mockJdbcTemplate.query(
+            Mockito.eq(HeroesRepositoryImpl.QUERY_BY_NAME),
+            Mockito.any(Map.class),
+            Mockito.any(HeroRowMapper.class)))
+        .thenReturn(expected);
 
     var actual = heroesRepository.findHeroesByName(name);
-
-    verify(mockEntityManager, times(1))
-        .createNativeQuery(HeroesRepositoryImpl.QUERY_BY_NAME, Hero.class);
-    verify(mockQuery, times(1)).getResultList();
 
     assertEquals(expected.size(), actual.size());
     assertEquals(expected.get(0), dummyHero);

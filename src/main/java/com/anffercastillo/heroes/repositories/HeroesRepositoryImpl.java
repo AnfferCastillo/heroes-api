@@ -64,6 +64,10 @@ public class HeroesRepositoryImpl implements HeroesRepository {
   @Override
   public void deleteById(long id) {
     var count = jdbcTemplate.update(DELETE_BY_ID, Map.of("id", id));
+
+    if(count == 0) {
+      throw new HeroesNotFoundException();
+    }
   }
 
   @Override

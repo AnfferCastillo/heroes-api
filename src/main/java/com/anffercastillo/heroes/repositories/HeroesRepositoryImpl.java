@@ -65,7 +65,7 @@ public class HeroesRepositoryImpl implements HeroesRepository {
   public void deleteById(long id) {
     var count = jdbcTemplate.update(DELETE_BY_ID, Map.of("id", id));
 
-    if(count == 0) {
+    if (count == 0) {
       throw new HeroesNotFoundException();
     }
   }
@@ -105,7 +105,7 @@ public class HeroesRepositoryImpl implements HeroesRepository {
   private HeroDTO setHeroSuperPowers(HeroDTO dto) {
     var superPowers =
         superPowersRepository.findSuperPowerByHeroId(dto.getId()).stream()
-            .map(SuperPowerDTO::getDescription)
+            .map(SuperPowerDTO::getName)
             .collect(Collectors.toList());
     dto.setSuperPowers(superPowers);
     return dto;

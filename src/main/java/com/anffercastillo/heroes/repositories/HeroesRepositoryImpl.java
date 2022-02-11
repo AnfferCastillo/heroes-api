@@ -21,6 +21,8 @@ public class HeroesRepositoryImpl implements HeroesRepository {
 
   protected static final String QUERY_ALL = "select * from heroes";
 
+  protected static final String QUERY_BY_ID = "select * from heroes where id = :id";
+
   private NamedParameterJdbcTemplate jdbcTemplate;
   private SuperPowerRepository superPowersRepository;
 
@@ -43,7 +45,15 @@ public class HeroesRepositoryImpl implements HeroesRepository {
 
   @Override
   public Optional<HeroDTO> findHeroById(long id) {
-    return null;
+    var parametersMap = new HashMap<String, Long>();
+    parametersMap.put("id", id);
+
+    var hero = jdbcTemplate.queryForObject(QUERY_BY_ID, parametersMap, new HeroRowMapper());
+
+    if (hero != null) {
+      hero = setHeroSuperPowers(hero);
+    }
+    return Optional.ofNullable(hero);
   }
 
   @Override

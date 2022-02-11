@@ -1,21 +1,10 @@
 package com.anffercastillo.heroes.controllers;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import java.util.List;
-import java.util.NoSuchElementException;
-
+import com.anffercastillo.heroes.dto.HeroRequest;
+import com.anffercastillo.heroes.dto.SearchResponse;
+import com.anffercastillo.heroes.services.HeroesService;
+import com.anffercastillo.heroes.utils.HeroTestsUtils;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,11 +17,16 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import com.anffercastillo.heroes.dto.HeroRequest;
-import com.anffercastillo.heroes.dto.SearchResponse;
-import com.anffercastillo.heroes.services.HeroesService;
-import com.anffercastillo.heroes.utils.HeroTestsUtils;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.List;
+import java.util.NoSuchElementException;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.*;
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 public class HeroesControllerTest {
@@ -223,6 +217,18 @@ public class HeroesControllerTest {
                 .content(
                     objectMapper.writeValueAsBytes(buildHeroRequest(SOME_FORENAME, SOME_NAME))))
         .andExpect(status().isUnauthorized());
+  }
+
+  @Test
+  @WithMockUser(roles = {"ADMIN"})
+  public void udpateHeroById_Bad_Request_Test() throws Exception {
+    HeroRequest heroRequest = buildHeroRequest(SOME_FORENAME, "");
+    mockMvc
+        .perform(
+            put("/heroes/" + ID)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsBytes(heroRequest)))
+        .andExpect(status().isBadRequest());
   }
 
   private HeroRequest buildHeroRequest(String updated_forename, String updated_name) {

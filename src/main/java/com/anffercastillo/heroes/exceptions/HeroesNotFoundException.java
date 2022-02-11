@@ -1,25 +1,25 @@
 package com.anffercastillo.heroes.exceptions;
 
-public class HeroesException extends Exception {
+public class HeroesNotFoundException extends Exception {
 
-  public HeroesException() {
+  public HeroesNotFoundException() {
     super();
   }
 
-  public HeroesException(
+  public HeroesNotFoundException(
       String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
     super(message, cause, enableSuppression, writableStackTrace);
   }
 
-  public HeroesException(String message, Throwable cause) {
+  public HeroesNotFoundException(String message, Throwable cause) {
     super(message, cause);
   }
 
-  public HeroesException(String message) {
+  public HeroesNotFoundException(String message) {
     super(message);
   }
 
-  public HeroesException(Throwable cause) {
+  public HeroesNotFoundException(Throwable cause) {
     super(cause);
   }
 }

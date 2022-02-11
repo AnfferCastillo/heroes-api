@@ -1,30 +1,23 @@
 package com.anffercastillo.heroes.services;
 
-import static com.anffercastillo.heroes.utils.HeroTestsUtils.buildDummyHeroEntity;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import com.anffercastillo.heroes.dto.HeroDTO;
+import com.anffercastillo.heroes.dto.HeroRequest;
+import com.anffercastillo.heroes.entities.Hero;
+import com.anffercastillo.heroes.entities.HeroesCompany;
+import com.anffercastillo.heroes.exceptions.HeroesNotFoundException;
+import com.anffercastillo.heroes.repositories.HeroesRepository;
+import com.anffercastillo.heroes.utils.MessagesConstants;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
-import com.anffercastillo.heroes.dto.HeroDTO;
-import com.anffercastillo.heroes.dto.HeroRequest;
-import com.anffercastillo.heroes.entities.Hero;
-import com.anffercastillo.heroes.entities.HeroesCompany;
-import com.anffercastillo.heroes.exceptions.HeroesException;
-import com.anffercastillo.heroes.repositories.HeroesRepository;
-import com.anffercastillo.heroes.utils.MessagesConstants;
+import static com.anffercastillo.heroes.utils.HeroTestsUtils.buildDummyHeroEntity;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
 public class HeroesServiceTest {
 
@@ -48,7 +41,7 @@ public class HeroesServiceTest {
   }
 
   @Test
-  public void getHeroeById_Test() throws HeroesException {
+  public void getHeroeById_Test() throws HeroesNotFoundException {
     var id = 1L;
 
     when(mockHeroesRepository.findHeroesById(id)).thenReturn(Optional.of(buildDummyHeroEntity(id)));
@@ -64,7 +57,9 @@ public class HeroesServiceTest {
 
     when(mockHeroesRepository.findHeroesById(id)).thenReturn(Optional.empty());
     assertThrows(
-        HeroesException.class, () -> heroService.getHero(id), MessagesConstants.HERO_NOT_FOUND);
+        HeroesNotFoundException.class,
+        () -> heroService.getHero(id),
+        MessagesConstants.HERO_NOT_FOUND);
   }
 
   @Test
@@ -77,7 +72,7 @@ public class HeroesServiceTest {
   }
 
   @Test
-  public void deleteById_Test() throws HeroesException {
+  public void deleteById_Test() throws HeroesNotFoundException {
     var id = 1L;
     var dummyHero1 = buildDummyHeroEntity(1L);
     var dummyHero2 = buildDummyHeroEntity(2L);
@@ -98,7 +93,9 @@ public class HeroesServiceTest {
   @Test
   public void deleteById_NotFound_Test() {
     assertThrows(
-        HeroesException.class, () -> heroService.deleteHero(-1L), MessagesConstants.HERO_NOT_FOUND);
+        HeroesNotFoundException.class,
+        () -> heroService.deleteHero(-1L),
+        MessagesConstants.HERO_NOT_FOUND);
   }
 
   @Test
@@ -137,7 +134,7 @@ public class HeroesServiceTest {
     when(mockHeroesRepository.findHeroesById(id)).thenReturn(Optional.empty());
 
     assertThrows(
-        HeroesException.class,
+        HeroesNotFoundException.class,
         () -> heroService.updateHero(id, heroUpdateRequest),
         MessagesConstants.HERO_EMPTY_NAME_ERROR);
   }
@@ -150,7 +147,7 @@ public class HeroesServiceTest {
     heroUpdateRequest.setForename(INVALID_UPDATED_ANOTHER_DUMMY_NAM);
 
     assertThrows(
-        HeroesException.class,
+        HeroesNotFoundException.class,
         () -> heroService.updateHero(id, heroUpdateRequest),
         MessagesConstants.INVALID_HERO_UPDATE_REQUEST);
 
@@ -178,7 +175,7 @@ public class HeroesServiceTest {
   @Test
   public void getHeroesByName_Fail_Test() {
     assertThrows(
-        HeroesException.class,
+        HeroesNotFoundException.class,
         () -> heroService.getHeroesByName(""),
         MessagesConstants.HERO_EMPTY_NAME_ERROR);
   }

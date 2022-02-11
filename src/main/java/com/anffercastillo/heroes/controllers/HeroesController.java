@@ -1,25 +1,18 @@
 package com.anffercastillo.heroes.controllers;
 
-import java.util.NoSuchElementException;
-
-import org.springframework.http.HttpStatus;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
-
 import com.anffercastillo.heroes.aspects.Measure;
 import com.anffercastillo.heroes.dto.HeroDTO;
 import com.anffercastillo.heroes.dto.HeroRequest;
 import com.anffercastillo.heroes.dto.SearchResponse;
-import com.anffercastillo.heroes.exceptions.HeroesException;
+import com.anffercastillo.heroes.exceptions.HeroesNotFoundException;
 import com.anffercastillo.heroes.services.HeroesService;
 import com.anffercastillo.heroes.utils.MessagesConstants;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
+
+import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("/heroes")
@@ -43,14 +36,14 @@ public class HeroesController {
   }
 
   @GetMapping("/{id}")
-  public HeroDTO getHero(@PathVariable long id) throws HeroesException {
+  public HeroDTO getHero(@PathVariable long id) throws HeroesNotFoundException {
     var hero = heroesService.getHero(id);
     return hero;
   }
 
   @PreAuthorize("hasRole('ADMIN')")
   @DeleteMapping("/{id}")
-  public void deleteHero(@PathVariable long id) throws HeroesException {
+  public void deleteHero(@PathVariable long id) throws HeroesNotFoundException {
     // FIXME: change this after exception handling is implmented
     try {
       heroesService.deleteHero(id);

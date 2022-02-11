@@ -1,24 +1,20 @@
 package com.anffercastillo.heroes.repositories;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.util.List;
-import java.util.Map;
-
+import com.anffercastillo.heroes.dto.HeroRowMapper;
+import com.anffercastillo.heroes.utils.HeroTestsUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
-import com.anffercastillo.heroes.dto.HeroRowMapper;
-import com.anffercastillo.heroes.utils.HeroTestsUtils;
+import java.util.List;
+import java.util.Map;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.*;
 
 public class HeroesRepositoryImplTest {
 
@@ -94,5 +90,21 @@ public class HeroesRepositoryImplTest {
 
     heroesRepository.deleteById(ID);
     verify(mockJdbcTemplate, times(1)).update(any(), any(Map.class));
+  }
+
+  @Test
+  public void saveHero_Test() {
+    var expected = HeroTestsUtils.buildDummyHero(ID);
+    expected.setName("UPDATED_NAME");
+    expected.setSuperPowers(List.of("New Power"));
+
+    when(mockJdbcTemplate.update(eq(HeroesRepositoryImpl.GET_NEXT_ID), any(Map.class)))
+        .thenReturn(1);
+    when(mockJdbcTemplate.update(eq(HeroesRepositoryImpl.SAVE_HERO), any(Map.class))).thenReturn(1);
+
+    var actual = heroesRepository.save(expected);
+    verify(mockJdbcTemplate, times(1)).update(any(), any(Map.class));
+
+    assertEquals(expected, actual);
   }
 }

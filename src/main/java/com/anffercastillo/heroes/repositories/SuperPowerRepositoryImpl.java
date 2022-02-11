@@ -61,7 +61,7 @@ public class SuperPowerRepositoryImpl implements SuperPowerRepository {
   }
 
   private void deleteHeroSuperPowers(long heroId) {
-    jdbcTemplate.update(DELETE_HERO_SUPER_POWERS, Map.of("hero_id", heroId));
+    jdbcTemplate.update(DELETE_HERO_SUPER_POWERS, Map.of("id", heroId));
   }
 
   private boolean validateSuperPowerList(List<SuperPowerDTO> superPowers) {

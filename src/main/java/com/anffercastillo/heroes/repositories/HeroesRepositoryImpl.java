@@ -2,7 +2,6 @@ package com.anffercastillo.heroes.repositories;
 
 import com.anffercastillo.heroes.dto.HeroDTO;
 import com.anffercastillo.heroes.dto.HeroRowMapper;
-import com.anffercastillo.heroes.dto.SuperPowerDTO;
 import com.anffercastillo.heroes.exceptions.HeroesNotFoundException;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -17,7 +16,7 @@ public class HeroesRepositoryImpl implements HeroesRepository {
 
   protected static final String GET_NEXT_ID = "select max(id) + 1 from heroes";
   protected static final String SAVE_HERO =
-      "update heroes set (name, forename, company) values (:name, :forename, :company) where id = :id";
+      "update heroes set name = :name, forename = :forename, company = :company where id = :id";
   // PROTECTED FOR TESTING PURPUSES
   protected static final String QUERY_BY_NAME =
       "select * from heroes where lower(name) like lower('%:name%')";
@@ -72,6 +71,9 @@ public class HeroesRepositoryImpl implements HeroesRepository {
 
   @Override
   public HeroDTO save(HeroDTO hero) {
+
+    superPowersRepository.updateHeroSuperPowers(hero.getId(), hero.getSuperPowers());
+
     var count =
         jdbcTemplate.update(
             SAVE_HERO,
@@ -103,10 +105,7 @@ public class HeroesRepositoryImpl implements HeroesRepository {
   }
 
   private HeroDTO setHeroSuperPowers(HeroDTO dto) {
-    var superPowers =
-        superPowersRepository.findSuperPowerByHeroId(dto.getId()).stream()
-            .map(SuperPowerDTO::getName)
-            .collect(Collectors.toList());
+    var superPowers = superPowersRepository.findSuperPowerByHeroId(dto.getId());
     dto.setSuperPowers(superPowers);
     return dto;
   }

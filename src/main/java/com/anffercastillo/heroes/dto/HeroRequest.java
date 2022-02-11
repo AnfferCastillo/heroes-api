@@ -12,7 +12,7 @@ public class HeroRequest {
 
   private HeroesCompany company;
 
-  private List<String> superPowers;
+  private List<SuperPowerDTO> superPowers;
 
   public String getName() {
     return name;
@@ -38,11 +38,11 @@ public class HeroRequest {
     this.company = company;
   }
 
-  public List<String> getSuperPowers() {
+  public List<SuperPowerDTO> getSuperPowers() {
     return superPowers;
   }
 
-  public void setSuperPowers(List<String> superPowers) {
+  public void setSuperPowers(List<SuperPowerDTO> superPowers) {
     this.superPowers = superPowers;
   }
 }

@@ -68,6 +68,9 @@ public class SuperPowerRepositoryImplTest {
     verify(mockJdbcTemplate, times(1))
         .queryForObject(
             eq(SuperPowerRepositoryImpl.COUNT_SUPER_POWERS), any(Map.class), any(Class.class));
+
+    verify(mockJdbcTemplate, times(1))
+        .update(eq(SuperPowerRepositoryImpl.DELETE_HERO_SUPER_POWERS), eq(Map.of("id", 1L)));
   }
 
   @Test

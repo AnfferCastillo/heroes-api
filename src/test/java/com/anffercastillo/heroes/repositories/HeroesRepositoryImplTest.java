@@ -86,7 +86,7 @@ public class HeroesRepositoryImplTest {
   @Test
   @SuppressWarnings("unchecked")
   public void deleteById_Test() {
-    when(mockJdbcTemplate.update(eq(HeroesRepositoryImpl.QUERY_BY_ID), any(Map.class)))
+    when(mockJdbcTemplate.update(eq(HeroesRepositoryImpl.DELETE_BY_ID), any(Map.class)))
         .thenReturn(1);
 
     heroesRepository.deleteById(ID);
@@ -106,7 +106,7 @@ public class HeroesRepositoryImplTest {
   public void saveHero_Test() {
     var expected = HeroTestsUtils.buildDummyHero(ID);
     expected.setName("UPDATED_NAME");
-    expected.setSuperPowers(List.of("New Power"));
+    expected.setSuperPowers(List.of(HeroTestsUtils.buildDummySuperPower(1L)));
 
     when(mockJdbcTemplate.query(eq(HeroesRepositoryImpl.GET_NEXT_ID), any(RowMapper.class)))
         .thenReturn(List.of(ID));

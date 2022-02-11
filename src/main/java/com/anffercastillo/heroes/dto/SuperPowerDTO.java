@@ -24,6 +24,12 @@ public class SuperPowerDTO {
     this.name = name;
   }
 
+  public static SuperPowerDTO buildSuperPowerDTO(String name) {
+    var dto = new SuperPowerDTO();
+    dto.setName(name);
+    return dto;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;

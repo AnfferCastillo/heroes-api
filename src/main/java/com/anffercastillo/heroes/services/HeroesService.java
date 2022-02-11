@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class HeroesService {
@@ -25,9 +24,7 @@ public class HeroesService {
 
   @Cacheable(value = "heroes", key = "#a0")
   public HeroDTO getHero(long id) {
-    return heroesRepository
-        .findById(id)
-        .orElseThrow(() -> new HeroesNotFoundException());
+    return heroesRepository.findById(id).orElseThrow(() -> new HeroesNotFoundException());
   }
 
   @Cacheable("search")
@@ -53,11 +50,7 @@ public class HeroesService {
   public HeroDTO updateHero(long id, HeroRequest heroUpdateRequest) {
     validateHeroRequest(heroUpdateRequest);
 
-    var currentHero =
-        heroesRepository.findById(id).orElseThrow(() -> new HeroesNotFoundException());
-
-    currentHero.setForename(heroUpdateRequest.getForename());
-    currentHero.setName(heroUpdateRequest.getName());
+    var currentHero = HeroDTO.buildHeroDTO(id, heroUpdateRequest);
 
     var updatedHero = heroesRepository.save(currentHero);
 

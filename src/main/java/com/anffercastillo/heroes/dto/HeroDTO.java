@@ -1,18 +1,15 @@
 package com.anffercastillo.heroes.dto;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
-
-import com.anffercastillo.heroes.entities.Hero;
-import com.anffercastillo.heroes.entities.SuperPowers;
 
 public class HeroDTO {
 
   private long id;
   private String name;
   private String forename;
-  private List<String> superPowers;
+  private List<SuperPowerDTO> superPowers;
   private String company;
 
   public String getCompany() {
@@ -47,22 +44,22 @@ public class HeroDTO {
     this.forename = forename;
   }
 
-  public List<String> getSuperPowers() {
+  public List<SuperPowerDTO> getSuperPowers() {
     return superPowers;
   }
 
-  public void setSuperPowers(List<String> superPowers) {
+  public void setSuperPowers(List<SuperPowerDTO> superPowers) {
     this.superPowers = superPowers;
   }
 
-  public static HeroDTO buildHeroDTO(Hero entity) {
+  public static HeroDTO buildHeroDTO(long id, HeroRequest request) {
     var dto = new HeroDTO();
-    dto.setName(entity.getName());
-    dto.setForename(entity.getForename());
-    dto.setId(entity.getId());
-    dto.setCompany(entity.getCompany().name());
-    dto.setSuperPowers(
-        entity.getSuperPowers().stream().map(SuperPowers::getName).collect(Collectors.toList()));
+    dto.setId(id);
+    dto.setName(request.getName());
+    dto.setForename(request.getForename());
+    dto.setCompany(request.getCompany().name());
+    dto.setSuperPowers(new ArrayList<SuperPowerDTO>());
+    dto.getSuperPowers().addAll(request.getSuperPowers());
     return dto;
   }
 

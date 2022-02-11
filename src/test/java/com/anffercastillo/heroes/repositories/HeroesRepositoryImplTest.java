@@ -1,7 +1,12 @@
 package com.anffercastillo.heroes.repositories;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.List;
@@ -68,5 +73,26 @@ public class HeroesRepositoryImplTest {
 
     var actual = heroesRepository.findHeroById(ID).get();
     assertEquals(expected, actual);
+  }
+
+  @Test
+  @SuppressWarnings("unchecked")
+  public void findHeroById_No_Results_Test() {
+    when(mockJdbcTemplate.queryForObject(
+            eq(HeroesRepositoryImpl.QUERY_BY_ID), any(Map.class), any(HeroRowMapper.class)))
+        .thenReturn(null);
+
+    var actual = heroesRepository.findHeroById(ID);
+    assertTrue(actual.isEmpty());
+  }
+
+  @Test
+  @SuppressWarnings("unchecked")
+  public void deleteById_Test() {
+    when(mockJdbcTemplate.update(eq(HeroesRepositoryImpl.QUERY_BY_ID), any(Map.class)))
+        .thenReturn(1);
+
+    heroesRepository.deleteById(ID);
+    verify(mockJdbcTemplate, times(1)).update(any(), any(Map.class));
   }
 }

@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
@@ -13,6 +14,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 public class HeroesExceptionHandler extends ResponseEntityExceptionHandler {
 
   @ExceptionHandler(HeroesNotFoundException.class)
+  @ResponseStatus(HttpStatus.NOT_FOUND)
   public ResponseEntity<ErrorResponse> handleHeroesExceptions(
       HeroesNotFoundException heroException, WebRequest request) {
     var errorResponse =
@@ -21,6 +23,7 @@ public class HeroesExceptionHandler extends ResponseEntityExceptionHandler {
   }
 
   @ExceptionHandler(HeroBadRequestException.class)
+  @ResponseStatus(HttpStatus.BAD_REQUEST)
   public ResponseEntity<ErrorResponse> handleBadRequestUpdate() {
     var errorResponse =
         new ErrorResponse(

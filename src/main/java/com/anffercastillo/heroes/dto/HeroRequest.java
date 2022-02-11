@@ -1,10 +1,11 @@
 package com.anffercastillo.heroes.dto;
 
-import java.util.List;
-
 import com.anffercastillo.heroes.entities.HeroesCompany;
 
+import java.util.List;
+
 public class HeroRequest {
+
   private String name;
 
   private String forename;

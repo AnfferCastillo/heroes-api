@@ -1,5 +1,6 @@
 package com.anffercastillo.heroes.repositories;
 
+import com.anffercastillo.heroes.exceptions.HeroBadRequestException;
 import com.anffercastillo.heroes.utils.HeroTestsUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,8 +11,7 @@ import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
@@ -51,13 +51,6 @@ public class SuperPowerRepositoryImplTest {
     var superPowers = List.of(dummySuperPower, dummySuperPower2);
 
     when(mockJdbcTemplate.queryForObject(
-            eq(SuperPowerRepositoryImpl.QUERY_BY_ID), eq(Map.of("id", 1L)), any(RowMapper.class)))
-        .thenReturn(dummySuperPower);
-    when(mockJdbcTemplate.queryForObject(
-            eq(SuperPowerRepositoryImpl.QUERY_BY_ID), eq(Map.of("id", 2L)), any(RowMapper.class)))
-        .thenReturn(dummySuperPower2);
-
-    when(mockJdbcTemplate.queryForObject(
             eq(SuperPowerRepositoryImpl.COUNT_SUPER_POWERS), any(Map.class), any(Class.class)))
         .thenReturn(2L);
 
@@ -66,6 +59,30 @@ public class SuperPowerRepositoryImplTest {
         .thenReturn(new int[] {1, 1});
 
     var actual = superPowerRepository.updateHeroSuperPowers(heroId, superPowers);
+
     assertTrue(expected.containsAll(actual));
+    verify(mockJdbcTemplate, times(1))
+        .queryForObject(
+            eq(SuperPowerRepositoryImpl.COUNT_SUPER_POWERS), any(Map.class), any(Class.class));
+
+    verify(mockJdbcTemplate, times(1))
+        .queryForObject(
+            eq(SuperPowerRepositoryImpl.COUNT_SUPER_POWERS), any(Map.class), any(Class.class));
+  }
+
+  @Test
+  public void updateHeroesSuperPowers_Invalid_Super_Powers_Test() {
+    var heroId = 1L;
+    var superPowers = List.of(HeroTestsUtils.buildDummySuperPower(1L));
+    when(mockJdbcTemplate.queryForObject(
+            eq(SuperPowerRepositoryImpl.COUNT_SUPER_POWERS), any(Map.class), any(Class.class)))
+        .thenReturn(0L);
+
+    assertThrows(
+        HeroBadRequestException.class,
+        () -> superPowerRepository.updateHeroSuperPowers(heroId, superPowers));
+    verify(mockJdbcTemplate, times(1))
+        .queryForObject(
+            eq(SuperPowerRepositoryImpl.COUNT_SUPER_POWERS), any(Map.class), any(Class.class));
   }
 }

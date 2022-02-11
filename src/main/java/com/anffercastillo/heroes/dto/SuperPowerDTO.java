@@ -1,10 +1,12 @@
 package com.anffercastillo.heroes.dto;
 
+import java.util.Objects;
+
 public class SuperPowerDTO {
 
   private long id;
 
-  private String description;
+  private String name;
 
   public long getId() {
     return id;
@@ -14,11 +16,24 @@ public class SuperPowerDTO {
     this.id = id;
   }
 
-  public String getDescription() {
-    return description;
+  public String getName() {
+    return name;
   }
 
-  public void setDescription(String description) {
-    this.description = description;
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    SuperPowerDTO that = (SuperPowerDTO) o;
+    return id == that.id && Objects.equals(name, that.name);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(id, name);
   }
 }

@@ -26,16 +26,13 @@ public class HeroesService {
   @Cacheable(value = "heroes", key = "#a0")
   public HeroDTO getHero(long id) {
     return heroesRepository
-        .findHeroesById(id)
-        .map(HeroDTO::buildHeroDTO)
+        .findHeroById(id)
         .orElseThrow(() -> new HeroesNotFoundException());
   }
 
   @Cacheable("search")
   public List<HeroDTO> getHeroes() {
-    return heroesRepository.findAll().stream()
-        .map(HeroDTO::buildHeroDTO)
-        .collect(Collectors.toList());
+    return heroesRepository.findAll();
   }
 
   @Caching(
@@ -57,14 +54,14 @@ public class HeroesService {
     validateHeroRequest(heroUpdateRequest);
 
     var currentHero =
-        heroesRepository.findHeroesById(id).orElseThrow(() -> new HeroesNotFoundException());
+        heroesRepository.findHeroById(id).orElseThrow(() -> new HeroesNotFoundException());
 
     currentHero.setForename(heroUpdateRequest.getForename());
     currentHero.setName(heroUpdateRequest.getName());
 
     var updatedHero = heroesRepository.save(currentHero);
 
-    return HeroDTO.buildHeroDTO(updatedHero);
+    return updatedHero;
   }
 
   @Cacheable(value = "search", key = "#a0")
@@ -72,9 +69,7 @@ public class HeroesService {
     if (!StringUtils.hasLength(name)) {
       throw new HeroBadRequestException();
     }
-    return heroesRepository.findHeroesByName(name).stream()
-        .map(HeroDTO::buildHeroDTO)
-        .collect(Collectors.toList());
+    return heroesRepository.findHeroesByName(name);
   }
 
   private void validateHeroRequest(HeroRequest heroUpdateRequest) {

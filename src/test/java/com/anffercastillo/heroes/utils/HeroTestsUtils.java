@@ -16,6 +16,8 @@ public class HeroTestsUtils {
     dummyHero.setForename(DUMMY_FORENAME + id);
     dummyHero.setName(DUMMY_NAME + id);
     dummyHero.setId(id);
+    dummyHero.setCompany(HeroesCompany.MARVEL.name());
+    dummyHero.setSuperPowers(Collections.emptyList());
     return dummyHero;
   }
 

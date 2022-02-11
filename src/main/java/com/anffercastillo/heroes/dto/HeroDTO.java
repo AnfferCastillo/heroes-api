@@ -13,14 +13,14 @@ public class HeroDTO {
   private String name;
   private String forename;
   private List<String> superPowers;
-  private String compay;
+  private String company;
 
-  public String getCompay() {
-    return compay;
+  public String getCompany() {
+    return company;
   }
 
-  public void setCompay(String compay) {
-    this.compay = compay;
+  public void setCompany(String compay) {
+    this.company = compay;
   }
 
   public long getId() {
@@ -60,7 +60,7 @@ public class HeroDTO {
     dto.setName(entity.getName());
     dto.setForename(entity.getForename());
     dto.setId(entity.getId());
-    dto.setCompay(entity.getCompany().name());
+    dto.setCompany(entity.getCompany().name());
     dto.setSuperPowers(
         entity.getSuperPowers().stream().map(SuperPowers::getName).collect(Collectors.toList()));
     return dto;

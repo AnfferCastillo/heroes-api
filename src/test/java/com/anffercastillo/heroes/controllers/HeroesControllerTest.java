@@ -2,6 +2,9 @@ package com.anffercastillo.heroes.controllers;
 
 import com.anffercastillo.heroes.dto.HeroRequest;
 import com.anffercastillo.heroes.dto.SearchResponse;
+import com.anffercastillo.heroes.entities.HeroesCompany;
+import com.anffercastillo.heroes.exceptions.HeroBadRequestException;
+import com.anffercastillo.heroes.exceptions.HeroesNotFoundException;
 import com.anffercastillo.heroes.services.HeroesService;
 import com.anffercastillo.heroes.utils.HeroTestsUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -17,8 +20,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.util.Collections;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
@@ -100,7 +103,7 @@ public class HeroesControllerTest {
   @Test
   @WithMockUser
   public void getHeroByID_Not_Found_Test() throws Exception {
-    when(mockHeroService.getHero(ID)).thenThrow(new NoSuchElementException());
+    when(mockHeroService.getHero(ID)).thenThrow(new HeroesNotFoundException());
 
     mockMvc.perform(get("/heroes/" + ID)).andExpect(status().isNotFound());
 
@@ -127,7 +130,7 @@ public class HeroesControllerTest {
       username = "admin",
       roles = {"ADMIN"})
   public void deleteHeroByID_NotFound_Test() throws Exception {
-    doThrow(new NoSuchElementException()).when(mockHeroService).deleteHero(ID);
+    doThrow(new HeroesNotFoundException()).when(mockHeroService).deleteHero(ID);
 
     mockMvc.perform(delete("/heroes/" + ID)).andExpect(status().isNotFound());
     verify(mockHeroService, times(1)).deleteHero(ID);
@@ -183,7 +186,7 @@ public class HeroesControllerTest {
       roles = {"ADMIN"})
   public void updateHeroById_Not_Found_Test() throws Exception {
     var heroRequest = buildHeroRequest(SOME_FORENAME, SOME_NAME);
-    when(mockHeroService.updateHero(eq(ID), any())).thenThrow(new NoSuchElementException());
+    when(mockHeroService.updateHero(eq(ID), any())).thenThrow(new HeroesNotFoundException());
 
     mockMvc
         .perform(
@@ -221,8 +224,9 @@ public class HeroesControllerTest {
 
   @Test
   @WithMockUser(roles = {"ADMIN"})
-  public void udpateHeroById_Bad_Request_Test() throws Exception {
+  public void updateHeroById_Bad_Request_Test() throws Exception {
     HeroRequest heroRequest = buildHeroRequest(SOME_FORENAME, "");
+    when(mockHeroService.updateHero(eq(ID), any())).thenThrow(new HeroBadRequestException());
     mockMvc
         .perform(
             put("/heroes/" + ID)
@@ -235,6 +239,8 @@ public class HeroesControllerTest {
     var heroRequest = new HeroRequest();
     heroRequest.setForename(updated_forename);
     heroRequest.setName(updated_name);
+    heroRequest.setCompany(HeroesCompany.MARVEL);
+    heroRequest.setSuperPowers(Collections.emptyList());
     return heroRequest;
   }
 }

@@ -4,6 +4,7 @@ import com.anffercastillo.heroes.dto.HeroDTO;
 import com.anffercastillo.heroes.dto.HeroRequest;
 import com.anffercastillo.heroes.entities.Hero;
 import com.anffercastillo.heroes.entities.HeroesCompany;
+import com.anffercastillo.heroes.exceptions.HeroBadRequestException;
 import com.anffercastillo.heroes.exceptions.HeroesNotFoundException;
 import com.anffercastillo.heroes.repositories.HeroesRepository;
 import com.anffercastillo.heroes.utils.MessagesConstants;
@@ -134,7 +135,7 @@ public class HeroesServiceTest {
     when(mockHeroesRepository.findHeroesById(id)).thenReturn(Optional.empty());
 
     assertThrows(
-        HeroesNotFoundException.class,
+        HeroBadRequestException.class,
         () -> heroService.updateHero(id, heroUpdateRequest),
         MessagesConstants.HERO_EMPTY_NAME_ERROR);
   }
@@ -147,7 +148,7 @@ public class HeroesServiceTest {
     heroUpdateRequest.setForename(INVALID_UPDATED_ANOTHER_DUMMY_NAM);
 
     assertThrows(
-        HeroesNotFoundException.class,
+        HeroBadRequestException.class,
         () -> heroService.updateHero(id, heroUpdateRequest),
         MessagesConstants.INVALID_HERO_UPDATE_REQUEST);
 
@@ -175,7 +176,7 @@ public class HeroesServiceTest {
   @Test
   public void getHeroesByName_Fail_Test() {
     assertThrows(
-        HeroesNotFoundException.class,
+        HeroBadRequestException.class,
         () -> heroService.getHeroesByName(""),
         MessagesConstants.HERO_EMPTY_NAME_ERROR);
   }

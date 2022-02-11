@@ -1,16 +1,10 @@
 package com.anffercastillo.heroes.controllers;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import java.util.List;
-
+import com.anffercastillo.heroes.dto.SearchResponse;
+import com.anffercastillo.heroes.exceptions.HeroBadRequestException;
+import com.anffercastillo.heroes.services.HeroesService;
+import com.anffercastillo.heroes.utils.HeroTestsUtils;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,10 +16,15 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import com.anffercastillo.heroes.dto.SearchResponse;
-import com.anffercastillo.heroes.services.HeroesService;
-import com.anffercastillo.heroes.utils.HeroTestsUtils;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.*;
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 public class SearchControllerTest {
@@ -70,6 +69,7 @@ public class SearchControllerTest {
   @Test
   @WithMockUser
   public void searchHeroesByName_Bad_Request_Test() throws Exception {
+    when(mockHeroService.getHeroesByName(any())).thenThrow(new HeroBadRequestException());
     mockMvc.perform(get("/search")).andExpect(status().isBadRequest());
     mockMvc.perform(get("/search?term=")).andExpect(status().isBadRequest());
   }

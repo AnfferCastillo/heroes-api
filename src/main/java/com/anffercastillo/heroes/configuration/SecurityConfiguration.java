@@ -29,8 +29,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         .cors()
         .disable()
         .authorizeRequests()
+        .antMatchers("/h2-console/**")
+        .permitAll()
         .anyRequest()
         .authenticated()
+        .and()
+        .headers()
+        .frameOptions()
+        .sameOrigin()
         .and()
         .httpBasic();
   }

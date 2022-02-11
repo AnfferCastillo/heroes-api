@@ -17,6 +17,7 @@ import com.anffercastillo.heroes.aspects.Measure;
 import com.anffercastillo.heroes.dto.HeroDTO;
 import com.anffercastillo.heroes.dto.HeroRequest;
 import com.anffercastillo.heroes.dto.SearchResponse;
+import com.anffercastillo.heroes.exceptions.HeroesException;
 import com.anffercastillo.heroes.services.HeroesService;
 import com.anffercastillo.heroes.utils.MessagesConstants;
 
@@ -42,19 +43,14 @@ public class HeroesController {
   }
 
   @GetMapping("/{id}")
-  public HeroDTO getHero(@PathVariable long id) {
-    // FIXME: change this after exception handling is implmented
-    try {
-      var hero = heroesService.getHero(id);
-      return hero;
-    } catch (NoSuchElementException e) {
-      throw new ResponseStatusException(HttpStatus.NOT_FOUND, MessagesConstants.HERO_NOT_FOUND);
-    }
+  public HeroDTO getHero(@PathVariable long id) throws HeroesException {
+    var hero = heroesService.getHero(id);
+    return hero;
   }
 
   @PreAuthorize("hasRole('ADMIN')")
   @DeleteMapping("/{id}")
-  public void deleteHero(@PathVariable long id) {
+  public void deleteHero(@PathVariable long id) throws HeroesException {
     // FIXME: change this after exception handling is implmented
     try {
       heroesService.deleteHero(id);

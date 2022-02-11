@@ -28,6 +28,15 @@ import com.anffercastillo.heroes.utils.MessagesConstants;
 
 public class HeroesServiceTest {
 
+  private static final String INVALID_UPDATED_DUMMY_NAME = "INVALID_UPDATED_DUMMY_NAME";
+
+  private static final String INVALID_UPDATED_ANOTHER_DUMMY_NAM =
+      "INVALID_UPDATED_ANOTHER_DUMMY_NAM";
+
+  private static final String UPDATED_DUMMY_NAME = "UPDATED_DUMMY_NAME";
+
+  private static final String UPDATED_ANOTHER_DUMMY_NAM = "UPDATED_ANOTHER_DUMMY_NAM";
+
   private HeroesService heroService;
 
   private HeroesRepository mockHeroesRepository;
@@ -87,7 +96,7 @@ public class HeroesServiceTest {
   }
 
   @Test
-  public void deleteById_Fail_Test() {
+  public void deleteById_NotFound_Test() {
     assertThrows(
         HeroesException.class, () -> heroService.deleteHero(-1L), MessagesConstants.HERO_NOT_FOUND);
   }
@@ -96,14 +105,14 @@ public class HeroesServiceTest {
   public void updateHero_Test() throws Exception {
     var id = 1L;
     var heroUpdateRequest = new HeroRequest();
-    heroUpdateRequest.setName("UPDATED_DUMMY_NAME");
-    heroUpdateRequest.setForename("UPDATED_ANOTHER_DUMMY_NAM");
+    heroUpdateRequest.setName(UPDATED_DUMMY_NAME);
+    heroUpdateRequest.setForename(UPDATED_ANOTHER_DUMMY_NAM);
     heroUpdateRequest.setSuperPowers(Collections.emptyList());
     heroUpdateRequest.setCompany(HeroesCompany.MARVEL);
 
     var expected = new Hero();
-    expected.setName("UPDATED_DUMMY_NAME");
-    expected.setForename("UPDATED_ANOTHER_DUMMY_NAM");
+    expected.setName(UPDATED_DUMMY_NAME);
+    expected.setForename(UPDATED_ANOTHER_DUMMY_NAM);
     expected.setSuperPowers(Collections.emptyList());
     expected.setCompany(HeroesCompany.MARVEL);
     expected.setId(1L);
@@ -122,8 +131,8 @@ public class HeroesServiceTest {
   public void updateHero_Fail_Test() {
     var id = -1L;
     var heroUpdateRequest = new HeroRequest();
-    heroUpdateRequest.setName("INVALID_UPDATED_DUMMY_NAME");
-    heroUpdateRequest.setForename("INVALID_UPDATED_ANOTHER_DUMMY_NAM");
+    heroUpdateRequest.setName(INVALID_UPDATED_DUMMY_NAME);
+    heroUpdateRequest.setForename(INVALID_UPDATED_ANOTHER_DUMMY_NAM);
 
     when(mockHeroesRepository.findHeroesById(id)).thenReturn(Optional.empty());
 
@@ -138,7 +147,7 @@ public class HeroesServiceTest {
     var id = -1L;
     var heroUpdateRequest = new HeroRequest();
     heroUpdateRequest.setName("");
-    heroUpdateRequest.setForename("INVALID_UPDATED_ANOTHER_DUMMY_NAM");
+    heroUpdateRequest.setForename(INVALID_UPDATED_ANOTHER_DUMMY_NAM);
 
     assertThrows(
         HeroesException.class,

@@ -91,6 +91,7 @@ public class HeroesRepositoryImplTest {
 
     heroesRepository.deleteById(ID);
     verify(mockJdbcTemplate, times(1)).update(any(), any(Map.class));
+    verify(mockSuperPowersRepository, times(1)).deleteHeroSuperPowers(ID);
   }
 
   @Test

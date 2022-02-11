@@ -1,17 +1,18 @@
 package com.anffercastillo.heroes.repositories;
 
 import com.anffercastillo.heroes.dto.HeroRowMapper;
+import com.anffercastillo.heroes.exceptions.HeroesNotFoundException;
 import com.anffercastillo.heroes.utils.HeroTestsUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
@@ -93,13 +94,22 @@ public class HeroesRepositoryImplTest {
   }
 
   @Test
+  public void deleteById_Not_Found_Test() {
+    when(mockJdbcTemplate.update(eq(HeroesRepositoryImpl.QUERY_BY_ID), any(Map.class)))
+        .thenThrow(new HeroesNotFoundException());
+
+    assertThrows(HeroesNotFoundException.class, () -> heroesRepository.deleteById(ID));
+    verify(mockJdbcTemplate, times(1)).update(any(), any(Map.class));
+  }
+
+  @Test
   public void saveHero_Test() {
     var expected = HeroTestsUtils.buildDummyHero(ID);
     expected.setName("UPDATED_NAME");
     expected.setSuperPowers(List.of("New Power"));
 
-    when(mockJdbcTemplate.update(eq(HeroesRepositoryImpl.GET_NEXT_ID), any(Map.class)))
-        .thenReturn(1);
+    when(mockJdbcTemplate.query(eq(HeroesRepositoryImpl.GET_NEXT_ID), any(RowMapper.class)))
+        .thenReturn(List.of(ID));
     when(mockJdbcTemplate.update(eq(HeroesRepositoryImpl.SAVE_HERO), any(Map.class))).thenReturn(1);
 
     var actual = heroesRepository.save(expected);

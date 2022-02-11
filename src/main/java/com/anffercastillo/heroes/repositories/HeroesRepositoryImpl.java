@@ -89,6 +89,15 @@ public class HeroesRepositoryImpl implements HeroesRepository {
     }
   }
 
+  private long getNextId() {
+    var result = jdbcTemplate.query(GET_NEXT_ID, (rs, rowNum) -> rs.getLong(1));
+    if (result.isEmpty()) {
+      return 1L;
+    } else {
+      return result.get(0);
+    }
+  }
+
   private HeroDTO setHeroSuperPowers(HeroDTO dto) {
     var superPowers =
         superPowersRepository.findSuperPowerByHeroId(dto.getId()).stream()

@@ -1,24 +1,30 @@
 package com.anffercastillo.heroes.services;
 
-import com.anffercastillo.heroes.dto.HeroDTO;
-import com.anffercastillo.heroes.dto.HeroRequest;
-import com.anffercastillo.heroes.entities.Hero;
-import com.anffercastillo.heroes.entities.HeroesCompany;
-import com.anffercastillo.heroes.exceptions.HeroBadRequestException;
-import com.anffercastillo.heroes.exceptions.HeroesNotFoundException;
-import com.anffercastillo.heroes.repositories.HeroesRepository;
-import com.anffercastillo.heroes.utils.MessagesConstants;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import static com.anffercastillo.heroes.utils.HeroTestsUtils.buildDummyHero;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import static com.anffercastillo.heroes.utils.HeroTestsUtils.buildDummyHeroEntity;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import com.anffercastillo.heroes.dto.HeroDTO;
+import com.anffercastillo.heroes.dto.HeroRequest;
+import com.anffercastillo.heroes.entities.HeroesCompany;
+import com.anffercastillo.heroes.exceptions.HeroBadRequestException;
+import com.anffercastillo.heroes.exceptions.HeroesNotFoundException;
+import com.anffercastillo.heroes.repositories.HeroesRepository;
+import com.anffercastillo.heroes.utils.MessagesConstants;
 
 public class HeroesServiceTest {
 
@@ -45,7 +51,7 @@ public class HeroesServiceTest {
   public void getHeroeById_Test() throws HeroesNotFoundException {
     var id = 1L;
 
-    when(mockHeroesRepository.findHeroesById(id)).thenReturn(Optional.of(buildDummyHeroEntity(id)));
+    when(mockHeroesRepository.findHeroById(id)).thenReturn(Optional.of(buildDummyHero(id)));
     var heroe = heroService.getHero(id);
 
     assertNotNull(heroe);
@@ -56,7 +62,7 @@ public class HeroesServiceTest {
   public void getHeroeById_Not_Found_Test() {
     var id = -1L;
 
-    when(mockHeroesRepository.findHeroesById(id)).thenReturn(Optional.empty());
+    when(mockHeroesRepository.findHeroById(id)).thenReturn(Optional.empty());
     assertThrows(
         HeroesNotFoundException.class,
         () -> heroService.getHero(id),
@@ -65,7 +71,7 @@ public class HeroesServiceTest {
 
   @Test
   public void getAllHeroes_Test() {
-    var dummyHero = buildDummyHeroEntity(1L);
+    var dummyHero = buildDummyHero(1L);
 
     when(mockHeroesRepository.findAll()).thenReturn(List.of(dummyHero));
     List<HeroDTO> heroes = heroService.getHeroes();
@@ -75,11 +81,11 @@ public class HeroesServiceTest {
   @Test
   public void deleteById_Test() throws HeroesNotFoundException {
     var id = 1L;
-    var dummyHero1 = buildDummyHeroEntity(1L);
-    var dummyHero2 = buildDummyHeroEntity(2L);
-    var dummyHero3 = buildDummyHeroEntity(3L);
+    var dummyHero1 = buildDummyHero(1L);
+    var dummyHero2 = buildDummyHero(2L);
+    var dummyHero3 = buildDummyHero(3L);
 
-    when(mockHeroesRepository.findHeroesById(id)).thenReturn(Optional.of(dummyHero1));
+    when(mockHeroesRepository.findHeroById(id)).thenReturn(Optional.of(dummyHero1));
     when(mockHeroesRepository.findAll()).thenReturn(List.of(dummyHero2, dummyHero3));
 
     heroService.deleteHero(id);
@@ -108,21 +114,21 @@ public class HeroesServiceTest {
     heroUpdateRequest.setSuperPowers(Collections.emptyList());
     heroUpdateRequest.setCompany(HeroesCompany.MARVEL);
 
-    var expected = new Hero();
+    var expected = new HeroDTO();
     expected.setName(UPDATED_DUMMY_NAME);
     expected.setForename(UPDATED_ANOTHER_DUMMY_NAM);
     expected.setSuperPowers(Collections.emptyList());
-    expected.setCompany(HeroesCompany.MARVEL);
-    expected.setId(1L);
+    expected.setCompany(HeroesCompany.MARVEL.name());
+    expected.setId(id);
 
-    var dummyHero = buildDummyHeroEntity(id);
+    var dummyHero = buildDummyHero(id);
 
-    when(mockHeroesRepository.save(any(Hero.class))).thenReturn(expected);
-    when(mockHeroesRepository.findHeroesById(id)).thenReturn(Optional.of(dummyHero));
+    when(mockHeroesRepository.save(any(HeroDTO.class))).thenReturn(expected);
+    when(mockHeroesRepository.findHeroById(id)).thenReturn(Optional.of(dummyHero));
 
     var actual = heroService.updateHero(id, heroUpdateRequest);
 
-    assertEquals(HeroDTO.buildHeroDTO(expected), actual);
+    assertEquals(expected, actual);
   }
 
   @Test
@@ -132,7 +138,7 @@ public class HeroesServiceTest {
     heroUpdateRequest.setName(INVALID_UPDATED_DUMMY_NAME);
     heroUpdateRequest.setForename(INVALID_UPDATED_ANOTHER_DUMMY_NAM);
 
-    when(mockHeroesRepository.findHeroesById(id)).thenReturn(Optional.empty());
+    when(mockHeroesRepository.findHeroById(id)).thenReturn(Optional.empty());
 
     assertThrows(
         HeroBadRequestException.class,
@@ -152,15 +158,15 @@ public class HeroesServiceTest {
         () -> heroService.updateHero(id, heroUpdateRequest),
         MessagesConstants.INVALID_HERO_UPDATE_REQUEST);
 
-    verify(mockHeroesRepository, times(0)).findHeroesById(id);
+    verify(mockHeroesRepository, times(0)).findHeroById(id);
     verify(mockHeroesRepository, times(0)).save(any());
   }
 
   @Test
   public void getHeroesByName_Test() throws Exception {
-    var dummyHero1 = buildDummyHeroEntity(1L);
-    var dummyHero2 = buildDummyHeroEntity(2L);
-    var dummyHero3 = buildDummyHeroEntity(3L);
+    var dummyHero1 = buildDummyHero(1L);
+    var dummyHero2 = buildDummyHero(2L);
+    var dummyHero3 = buildDummyHero(3L);
 
     when(mockHeroesRepository.findHeroesByName("DUMMY"))
         .thenReturn(List.of(dummyHero1, dummyHero2, dummyHero3));

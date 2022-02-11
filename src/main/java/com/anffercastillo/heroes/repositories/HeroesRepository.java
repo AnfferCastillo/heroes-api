@@ -7,7 +7,7 @@ import com.anffercastillo.heroes.dto.HeroDTO;
 
 public interface HeroesRepository {
 
-  Optional<HeroDTO> findHeroById(long id);
+  Optional<HeroDTO> findById(long id);
 
   List<HeroDTO> findAll();
 

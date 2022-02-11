@@ -71,7 +71,7 @@ public class HeroesRepositoryImplTest {
             Mockito.any(HeroRowMapper.class)))
         .thenReturn(expected);
 
-    var actual = heroesRepository.findHeroById(ID).get();
+    var actual = heroesRepository.findById(ID).get();
     assertEquals(expected, actual);
   }
 
@@ -82,7 +82,7 @@ public class HeroesRepositoryImplTest {
             eq(HeroesRepositoryImpl.QUERY_BY_ID), any(Map.class), any(HeroRowMapper.class)))
         .thenReturn(null);
 
-    var actual = heroesRepository.findHeroById(ID);
+    var actual = heroesRepository.findById(ID);
     assertTrue(actual.isEmpty());
   }
 

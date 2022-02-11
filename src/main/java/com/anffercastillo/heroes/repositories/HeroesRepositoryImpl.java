@@ -1,7 +1,7 @@
 package com.anffercastillo.heroes.repositories;
 
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -23,6 +23,8 @@ public class HeroesRepositoryImpl implements HeroesRepository {
 
   protected static final String QUERY_BY_ID = "select * from heroes where id = :id";
 
+  protected static final String DELETE_BY_ID = "delete from heroes where id = :id";
+
   private NamedParameterJdbcTemplate jdbcTemplate;
   private SuperPowerRepository superPowersRepository;
 
@@ -34,21 +36,16 @@ public class HeroesRepositoryImpl implements HeroesRepository {
 
   @Override
   public List<HeroDTO> findHeroesByName(String name) {
-    var parametersMap = new HashMap<String, String>();
-    parametersMap.put("name", name);
     return jdbcTemplate
-        .query(QUERY_BY_NAME, parametersMap, new HeroRowMapper())
+        .query(QUERY_BY_NAME, Map.of("name", name), new HeroRowMapper())
         .stream()
         .map(this::setHeroSuperPowers)
         .collect(Collectors.toList());
   }
 
   @Override
-  public Optional<HeroDTO> findHeroById(long id) {
-    var parametersMap = new HashMap<String, Long>();
-    parametersMap.put("id", id);
-
-    var hero = jdbcTemplate.queryForObject(QUERY_BY_ID, parametersMap, new HeroRowMapper());
+  public Optional<HeroDTO> findById(long id) {
+    var hero = jdbcTemplate.queryForObject(QUERY_BY_ID, Map.of("id", id), new HeroRowMapper());
 
     if (hero != null) {
       hero = setHeroSuperPowers(hero);
@@ -67,8 +64,7 @@ public class HeroesRepositoryImpl implements HeroesRepository {
 
   @Override
   public void deleteById(long id) {
-    // TODO Auto-generated method stub
-
+    var count = jdbcTemplate.update(DELETE_BY_ID, Map.of("id", id));
   }
 
   @Override

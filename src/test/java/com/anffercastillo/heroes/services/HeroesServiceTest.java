@@ -51,7 +51,7 @@ public class HeroesServiceTest {
   public void getHeroeById_Test() throws HeroesNotFoundException {
     var id = 1L;
 
-    when(mockHeroesRepository.findHeroById(id)).thenReturn(Optional.of(buildDummyHero(id)));
+    when(mockHeroesRepository.findById(id)).thenReturn(Optional.of(buildDummyHero(id)));
     var heroe = heroService.getHero(id);
 
     assertNotNull(heroe);
@@ -62,7 +62,7 @@ public class HeroesServiceTest {
   public void getHeroeById_Not_Found_Test() {
     var id = -1L;
 
-    when(mockHeroesRepository.findHeroById(id)).thenReturn(Optional.empty());
+    when(mockHeroesRepository.findById(id)).thenReturn(Optional.empty());
     assertThrows(
         HeroesNotFoundException.class,
         () -> heroService.getHero(id),
@@ -85,7 +85,7 @@ public class HeroesServiceTest {
     var dummyHero2 = buildDummyHero(2L);
     var dummyHero3 = buildDummyHero(3L);
 
-    when(mockHeroesRepository.findHeroById(id)).thenReturn(Optional.of(dummyHero1));
+    when(mockHeroesRepository.findById(id)).thenReturn(Optional.of(dummyHero1));
     when(mockHeroesRepository.findAll()).thenReturn(List.of(dummyHero2, dummyHero3));
 
     heroService.deleteHero(id);
@@ -124,7 +124,7 @@ public class HeroesServiceTest {
     var dummyHero = buildDummyHero(id);
 
     when(mockHeroesRepository.save(any(HeroDTO.class))).thenReturn(expected);
-    when(mockHeroesRepository.findHeroById(id)).thenReturn(Optional.of(dummyHero));
+    when(mockHeroesRepository.findById(id)).thenReturn(Optional.of(dummyHero));
 
     var actual = heroService.updateHero(id, heroUpdateRequest);
 
@@ -138,7 +138,7 @@ public class HeroesServiceTest {
     heroUpdateRequest.setName(INVALID_UPDATED_DUMMY_NAME);
     heroUpdateRequest.setForename(INVALID_UPDATED_ANOTHER_DUMMY_NAM);
 
-    when(mockHeroesRepository.findHeroById(id)).thenReturn(Optional.empty());
+    when(mockHeroesRepository.findById(id)).thenReturn(Optional.empty());
 
     assertThrows(
         HeroBadRequestException.class,
@@ -158,7 +158,7 @@ public class HeroesServiceTest {
         () -> heroService.updateHero(id, heroUpdateRequest),
         MessagesConstants.INVALID_HERO_UPDATE_REQUEST);
 
-    verify(mockHeroesRepository, times(0)).findHeroById(id);
+    verify(mockHeroesRepository, times(0)).findById(id);
     verify(mockHeroesRepository, times(0)).save(any());
   }
 

@@ -26,7 +26,7 @@ public class HeroesService {
   @Cacheable(value = "heroes", key = "#a0")
   public HeroDTO getHero(long id) {
     return heroesRepository
-        .findHeroById(id)
+        .findById(id)
         .orElseThrow(() -> new HeroesNotFoundException());
   }
 
@@ -54,7 +54,7 @@ public class HeroesService {
     validateHeroRequest(heroUpdateRequest);
 
     var currentHero =
-        heroesRepository.findHeroById(id).orElseThrow(() -> new HeroesNotFoundException());
+        heroesRepository.findById(id).orElseThrow(() -> new HeroesNotFoundException());
 
     currentHero.setForename(heroUpdateRequest.getForename());
     currentHero.setName(heroUpdateRequest.getName());

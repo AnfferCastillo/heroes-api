@@ -111,10 +111,12 @@ public class HeroesRepositoryImplTest {
     when(mockJdbcTemplate.query(eq(HeroesRepositoryImpl.GET_NEXT_ID), any(RowMapper.class)))
         .thenReturn(List.of(ID));
     when(mockJdbcTemplate.update(eq(HeroesRepositoryImpl.SAVE_HERO), any(Map.class))).thenReturn(1);
+    when(mockSuperPowersRepository.updateHeroSuperPowers(eq(ID), any()))
+        .thenReturn(List.of(HeroTestsUtils.buildDummySuperPower(1L)));
 
     var actual = heroesRepository.save(expected);
     verify(mockJdbcTemplate, times(1)).update(any(), any(Map.class));
-
+    verify(mockSuperPowersRepository, times(1)).updateHeroSuperPowers(eq(ID), any());
     assertEquals(expected, actual);
   }
 }

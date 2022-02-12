@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class HeroesService {
@@ -25,17 +24,12 @@ public class HeroesService {
 
   @Cacheable(value = "heroes", key = "#a0")
   public HeroDTO getHero(long id) {
-    return heroesRepository
-        .findHeroesById(id)
-        .map(HeroDTO::buildHeroDTO)
-        .orElseThrow(() -> new HeroesNotFoundException());
+    return heroesRepository.findById(id).orElseThrow(() -> new HeroesNotFoundException());
   }
 
   @Cacheable("search")
   public List<HeroDTO> getHeroes() {
-    return heroesRepository.findAll().stream()
-        .map(HeroDTO::buildHeroDTO)
-        .collect(Collectors.toList());
+    return heroesRepository.findAll();
   }
 
   @Caching(
@@ -56,15 +50,11 @@ public class HeroesService {
   public HeroDTO updateHero(long id, HeroRequest heroUpdateRequest) {
     validateHeroRequest(heroUpdateRequest);
 
-    var currentHero =
-        heroesRepository.findHeroesById(id).orElseThrow(() -> new HeroesNotFoundException());
-
-    currentHero.setForename(heroUpdateRequest.getForename());
-    currentHero.setName(heroUpdateRequest.getName());
+    var currentHero = HeroDTO.buildHeroDTO(id, heroUpdateRequest);
 
     var updatedHero = heroesRepository.save(currentHero);
 
-    return HeroDTO.buildHeroDTO(updatedHero);
+    return updatedHero;
   }
 
   @Cacheable(value = "search", key = "#a0")
@@ -72,9 +62,7 @@ public class HeroesService {
     if (!StringUtils.hasLength(name)) {
       throw new HeroBadRequestException();
     }
-    return heroesRepository.findHeroesByName(name).stream()
-        .map(HeroDTO::buildHeroDTO)
-        .collect(Collectors.toList());
+    return heroesRepository.findHeroesByName(name);
   }
 
   private void validateHeroRequest(HeroRequest heroUpdateRequest) {

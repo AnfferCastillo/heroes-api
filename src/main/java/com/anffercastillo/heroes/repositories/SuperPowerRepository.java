@@ -12,4 +12,6 @@ public interface SuperPowerRepository {
   List<SuperPowerDTO> updateHeroSuperPowers(long heroId, List<SuperPowerDTO> superPowes);
 
   Optional<SuperPowerDTO> findById(long id);
+
+  void deleteHeroSuperPowers(long heroId);
 }

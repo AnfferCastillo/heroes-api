@@ -1,5 +1,5 @@
 
-insert into HEROES (id, name, forename, company) values (1, 'Adeline', 'Adeline Haggerwood', 'MARVEL');
+insert into HEROES (id, name, forename, company) values (1, 'El Chapulin', 'Chespirito', 'MARVEL');
 insert into HEROES (id, name, forename, company) values (2, 'Goldi', 'Goldi Ecob', 'DC');
 insert into HEROES (id, name, forename, company) values (3, 'Josi', 'Josi Kryszka', 'DC');
 insert into HEROES (id, name, forename, company) values (4, 'Farra', 'Farra Dranfield', 'DC');
@@ -24,25 +24,25 @@ insert into HEROES (id, name, forename, company) values (20, 'Bobbe', 'Bobbe Web
 insert into SUPER_POWERS (id, name) values (2, 'invisibilidad');
 insert into SUPER_POWERS (id, name) values (3, 'super velocidad');
 insert into SUPER_POWERS (id, name) values (4, 'cambio de forma');
-insert into SUPER_POWERS (id, name) values (5, 'super fuerza-Dox');
+insert into SUPER_POWERS (id, name) values (5, 'chicharra paralizadora');
 insert into SUPER_POWERS (id, name) values (6, 'volar');
 insert into SUPER_POWERS (id, name) values (7, 'super sentidos');
-insert into SUPER_POWERS (id, name) values (8, 'telepatia');
+insert into SUPER_POWERS (id, name) values (8, 'antenitas de vinil');
 insert into SUPER_POWERS (id, name) values (9, 'telequinesis');
 insert into SUPER_POWERS (id, name) values (10, 'teleportacion');
 insert into SUPER_POWERS (id, name) values (11, 'regeneracion');
 insert into SUPER_POWERS (id, name) values (12, 'super eslaticidad');
 insert into SUPER_POWERS (id, name) values (13, 'manipulacion de elementos');
-insert into SUPER_POWERS (id, name) values (14, 'vision de rayos x');
-insert into SUPER_POWERS (id, name) values (15, 'riqueza');
+insert into SUPER_POWERS (id, name) values (14, 'chipote chillon');
+insert into SUPER_POWERS (id, name) values (15, 'pastillas de chiquitolina');
 
 
 insert into HEROES_SUPER_POWERS (hero_id, super_power_id) values (12, 1);
 insert into HEROES_SUPER_POWERS (hero_id, super_power_id) values (17, 10);
-insert into HEROES_SUPER_POWERS (hero_id, super_power_id) values (15, 15);
-insert into HEROES_SUPER_POWERS (hero_id, super_power_id) values (2, 14);
+insert into HEROES_SUPER_POWERS (hero_id, super_power_id) values (1, 15);
+insert into HEROES_SUPER_POWERS (hero_id, super_power_id) values (1, 14);
 insert into HEROES_SUPER_POWERS (hero_id, super_power_id) values (16, 14);
-insert into HEROES_SUPER_POWERS (hero_id, super_power_id) values (1, 11);
+insert into HEROES_SUPER_POWERS (hero_id, super_power_id) values (1, 8);
 insert into HEROES_SUPER_POWERS (hero_id, super_power_id) values (2, 13);
 insert into HEROES_SUPER_POWERS (hero_id, super_power_id) values (4, 12);
 insert into HEROES_SUPER_POWERS (hero_id, super_power_id) values (3, 10);
@@ -57,7 +57,7 @@ insert into HEROES_SUPER_POWERS (hero_id, super_power_id) values (4, 4);
 insert into HEROES_SUPER_POWERS (hero_id, super_power_id) values (2, 13);
 insert into HEROES_SUPER_POWERS (hero_id, super_power_id) values (19, 8);
 insert into HEROES_SUPER_POWERS (hero_id, super_power_id) values (19, 2);
-insert into HEROES_SUPER_POWERS (hero_id, super_power_id) values (2, 5);
+insert into HEROES_SUPER_POWERS (hero_id, super_power_id) values (1, 5);
 insert into HEROES_SUPER_POWERS (hero_id, super_power_id) values (11, 10);
 insert into HEROES_SUPER_POWERS (hero_id, super_power_id) values (2, 3);
 insert into HEROES_SUPER_POWERS (hero_id, super_power_id) values (17, 2);

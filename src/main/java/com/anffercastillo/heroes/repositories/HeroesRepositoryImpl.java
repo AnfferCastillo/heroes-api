@@ -62,6 +62,7 @@ public class HeroesRepositoryImpl implements HeroesRepository {
 
   @Override
   public void deleteById(long id) {
+    superPowersRepository.deleteHeroSuperPowers(id);
     var count = jdbcTemplate.update(DELETE_BY_ID, Map.of("id", id));
 
     if (count == 0) {

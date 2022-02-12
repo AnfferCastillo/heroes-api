@@ -96,11 +96,11 @@ public class HeroesRepositoryImplTest {
 
   @Test
   public void deleteById_Not_Found_Test() {
-    when(mockJdbcTemplate.update(eq(HeroesRepositoryImpl.QUERY_BY_ID), any(Map.class)))
+    when(mockJdbcTemplate.update(eq(HeroesRepositoryImpl.QUERY_BY_ID), eq(Map.of("id", 1L))))
         .thenThrow(new HeroesNotFoundException());
 
     assertThrows(HeroesNotFoundException.class, () -> heroesRepository.deleteById(ID));
-    verify(mockJdbcTemplate, times(1)).update(any(), any(Map.class));
+    verify(mockJdbcTemplate, times(1)).update(any(), eq(Map.of("id", 1L)));
   }
 
   @Test

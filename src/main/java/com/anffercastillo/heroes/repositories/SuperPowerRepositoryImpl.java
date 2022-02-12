@@ -60,7 +60,7 @@ public class SuperPowerRepositoryImpl implements SuperPowerRepository {
     return Optional.ofNullable(superPower);
   }
 
-  private void deleteHeroSuperPowers(long heroId) {
+  public void deleteHeroSuperPowers(long heroId) {
     jdbcTemplate.update(DELETE_HERO_SUPER_POWERS, Map.of("id", heroId));
   }
 

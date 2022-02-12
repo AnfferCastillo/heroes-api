@@ -1,30 +1,24 @@
 package com.anffercastillo.heroes.services;
 
-import static com.anffercastillo.heroes.utils.HeroTestsUtils.buildDummyHero;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
 import com.anffercastillo.heroes.dto.HeroDTO;
 import com.anffercastillo.heroes.dto.HeroRequest;
 import com.anffercastillo.heroes.entities.HeroesCompany;
 import com.anffercastillo.heroes.exceptions.HeroBadRequestException;
 import com.anffercastillo.heroes.exceptions.HeroesNotFoundException;
 import com.anffercastillo.heroes.repositories.HeroesRepository;
+import com.anffercastillo.heroes.utils.HeroTestsUtils;
 import com.anffercastillo.heroes.utils.MessagesConstants;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+
+import static com.anffercastillo.heroes.utils.HeroTestsUtils.buildDummyHero;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
 public class HeroesServiceTest {
 
@@ -148,10 +142,11 @@ public class HeroesServiceTest {
 
   @Test
   public void updateHero_Fail_Invalid_Params_Test() {
-    var id = -1L;
-    var heroUpdateRequest = new HeroRequest();
+    var id = 1L;
+    var heroUpdateRequest = HeroTestsUtils.dummyHeroRequest(id);
     heroUpdateRequest.setName("");
     heroUpdateRequest.setForename(INVALID_UPDATED_ANOTHER_DUMMY_NAM);
+    var heroDTO = HeroDTO.buildHeroDTO(1L, heroUpdateRequest);
 
     assertThrows(
         HeroBadRequestException.class,
@@ -159,7 +154,7 @@ public class HeroesServiceTest {
         MessagesConstants.INVALID_HERO_UPDATE_REQUEST);
 
     verify(mockHeroesRepository, times(0)).findById(id);
-    verify(mockHeroesRepository, times(0)).save(any());
+    verify(mockHeroesRepository, times(0)).save(eq(heroDTO));
   }
 
   @Test

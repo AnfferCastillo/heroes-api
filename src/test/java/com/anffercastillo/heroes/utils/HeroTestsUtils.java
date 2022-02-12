@@ -1,10 +1,12 @@
 package com.anffercastillo.heroes.utils;
 
 import com.anffercastillo.heroes.dto.HeroDTO;
+import com.anffercastillo.heroes.dto.HeroRequest;
 import com.anffercastillo.heroes.dto.SuperPowerDTO;
 import com.anffercastillo.heroes.entities.HeroesCompany;
 
 import java.util.Collections;
+import java.util.List;
 
 public class HeroTestsUtils {
 
@@ -26,5 +28,14 @@ public class HeroTestsUtils {
     dummySuperPower.setId(id);
     dummySuperPower.setName("DUMMY_SUPER_POWER_NAME_" + id);
     return dummySuperPower;
+  }
+
+  public static HeroRequest dummyHeroRequest(long id) {
+    var dummyRequest = new HeroRequest();
+    dummyRequest.setCompany(HeroesCompany.MARVEL);
+    dummyRequest.setForename(DUMMY_FORENAME + id);
+    dummyRequest.setSuperPowers(List.of(buildDummySuperPower(id)));
+    dummyRequest.setName(DUMMY_NAME + id);
+    return dummyRequest;
   }
 }

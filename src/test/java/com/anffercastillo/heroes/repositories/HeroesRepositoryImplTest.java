@@ -90,24 +90,26 @@ public class HeroesRepositoryImplTest {
         .thenReturn(1);
 
     heroesRepository.deleteById(ID);
-    verify(mockJdbcTemplate, times(1)).update(any(), any(Map.class));
+    verify(mockJdbcTemplate, times(1))
+        .update(eq(HeroesRepositoryImpl.DELETE_BY_ID), eq(Map.of("id", ID)));
     verify(mockSuperPowersRepository, times(1)).deleteHeroSuperPowers(ID);
   }
 
   @Test
   public void deleteById_Not_Found_Test() {
-    when(mockJdbcTemplate.update(eq(HeroesRepositoryImpl.QUERY_BY_ID), eq(Map.of("id", 1L))))
+    when(mockJdbcTemplate.update(eq(HeroesRepositoryImpl.QUERY_BY_ID), eq(Map.of("id", ID))))
         .thenThrow(new HeroesNotFoundException());
 
     assertThrows(HeroesNotFoundException.class, () -> heroesRepository.deleteById(ID));
-    verify(mockJdbcTemplate, times(1)).update(any(), eq(Map.of("id", 1L)));
+    verify(mockJdbcTemplate, times(1))
+        .update(eq(HeroesRepositoryImpl.DELETE_BY_ID), eq(Map.of("id", ID)));
   }
 
   @Test
   public void saveHero_Test() {
     var expected = HeroTestsUtils.buildDummyHero(ID);
     expected.setName("UPDATED_NAME");
-    expected.setSuperPowers(List.of(HeroTestsUtils.buildDummySuperPower(1L)));
+    expected.setSuperPowers(List.of(HeroTestsUtils.buildDummySuperPower(ID)));
 
     when(mockJdbcTemplate.query(eq(HeroesRepositoryImpl.GET_NEXT_ID), any(RowMapper.class)))
         .thenReturn(List.of(ID));
@@ -116,8 +118,21 @@ public class HeroesRepositoryImplTest {
         .thenReturn(List.of(HeroTestsUtils.buildDummySuperPower(1L)));
 
     var actual = heroesRepository.save(expected);
-    verify(mockJdbcTemplate, times(1)).update(any(), any(Map.class));
-    verify(mockSuperPowersRepository, times(1)).updateHeroSuperPowers(eq(ID), any());
+    verify(mockJdbcTemplate, times(1))
+        .update(
+            eq(HeroesRepositoryImpl.SAVE_HERO),
+            eq(
+                Map.of(
+                    "name",
+                    expected.getName(),
+                    "forename",
+                    expected.getForename(),
+                    "company",
+                    expected.getCompany(),
+                    "id",
+                    expected.getId())));
+    verify(mockSuperPowersRepository, times(1))
+        .updateHeroSuperPowers(eq(ID), eq(expected.getSuperPowers()));
     assertEquals(expected, actual);
   }
 }

@@ -18,8 +18,7 @@ public class HeroesRepositoryImpl implements HeroesRepository {
   protected static final String SAVE_HERO =
       "update heroes set name = :name, forename = :forename, company = :company where id = :id";
   // PROTECTED FOR TESTING PURPUSES
-  protected static final String QUERY_BY_NAME =
-      "select * from heroes where lower(name) like lower('%:name%')";
+  protected static final String QUERY_BY_NAME = "select * from heroes where lower(name) like :name";
 
   protected static final String QUERY_ALL = "select * from heroes";
 
@@ -38,7 +37,10 @@ public class HeroesRepositoryImpl implements HeroesRepository {
 
   @Override
   public List<HeroDTO> findHeroesByName(String name) {
-    return jdbcTemplate.query(QUERY_BY_NAME, Map.of("name", name), new HeroRowMapper()).stream()
+    var param = new StringBuilder().append("%").append(name.toLowerCase()).append("%");
+    return jdbcTemplate
+        .query(QUERY_BY_NAME, Map.of("name", param.toString()), new HeroRowMapper())
+        .stream()
         .map(this::setHeroSuperPowers)
         .collect(Collectors.toList());
   }

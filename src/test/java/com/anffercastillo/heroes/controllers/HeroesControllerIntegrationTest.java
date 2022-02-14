@@ -155,7 +155,6 @@ public class HeroesControllerIntegrationTest {
             .getResponse()
             .getContentAsString();
 
-    var oldHero = objectMapper.readValue(getHeroResponse, HeroDTO.class);
     HeroRequest heroRequest = buildHeroRequest("Cara Panetone", "Hombre Tostadas en Polvo");
 
     var responseString =

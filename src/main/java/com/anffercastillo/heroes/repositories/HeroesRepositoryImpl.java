@@ -14,7 +14,6 @@ import java.util.stream.Collectors;
 @Repository
 public class HeroesRepositoryImpl implements HeroesRepository {
 
-  protected static final String GET_NEXT_ID = "select max(id) + 1 from heroes";
   protected static final String SAVE_HERO =
       "update heroes set name = :name, forename = :forename, company = :company where id = :id";
   // PROTECTED FOR TESTING PURPUSES
@@ -95,15 +94,6 @@ public class HeroesRepositoryImpl implements HeroesRepository {
       return hero;
     } else {
       throw new HeroesNotFoundException();
-    }
-  }
-
-  private long getNextId() {
-    var result = jdbcTemplate.query(GET_NEXT_ID, (rs, rowNum) -> rs.getLong(1));
-    if (result.isEmpty()) {
-      return 1L;
-    } else {
-      return result.get(0);
     }
   }
 

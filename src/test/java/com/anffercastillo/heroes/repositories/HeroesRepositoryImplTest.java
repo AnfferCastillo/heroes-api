@@ -6,7 +6,6 @@ import com.anffercastillo.heroes.utils.HeroTestsUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
 import java.util.List;
@@ -111,8 +110,6 @@ public class HeroesRepositoryImplTest {
     expected.setName("UPDATED_NAME");
     expected.setSuperPowers(List.of(HeroTestsUtils.buildDummySuperPower(ID)));
 
-    when(mockJdbcTemplate.query(eq(HeroesRepositoryImpl.GET_NEXT_ID), any(RowMapper.class)))
-        .thenReturn(List.of(ID));
     when(mockJdbcTemplate.update(eq(HeroesRepositoryImpl.SAVE_HERO), any(Map.class))).thenReturn(1);
     when(mockSuperPowersRepository.updateHeroSuperPowers(eq(ID), any()))
         .thenReturn(List.of(HeroTestsUtils.buildDummySuperPower(1L)));

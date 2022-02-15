@@ -3,7 +3,7 @@ package com.anffercastillo.heroes.services;
 import com.anffercastillo.heroes.dto.HeroDTO;
 import com.anffercastillo.heroes.dto.HeroRequest;
 import com.anffercastillo.heroes.exceptions.HeroBadRequestException;
-import com.anffercastillo.heroes.exceptions.HeroesNotFoundException;
+import com.anffercastillo.heroes.exceptions.HeroNotFoundException;
 import com.anffercastillo.heroes.repositories.HeroesRepository;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -24,7 +24,7 @@ public class HeroesService {
 
   @Cacheable(value = "heroes", key = "#a0")
   public HeroDTO getHero(long id) {
-    return heroesRepository.findById(id).orElseThrow(() -> new HeroesNotFoundException());
+    return heroesRepository.findById(id).orElseThrow(HeroNotFoundException::new);
   }
 
   @Cacheable("search")
@@ -51,10 +51,8 @@ public class HeroesService {
     validateHeroRequest(heroUpdateRequest);
 
     var currentHero = HeroDTO.buildHeroDTO(id, heroUpdateRequest);
-
-    var updatedHero = heroesRepository.save(currentHero);
-
-    return updatedHero;
+    heroesRepository.save(currentHero);
+    return currentHero;
   }
 
   @Cacheable(value = "search", key = "#a0")

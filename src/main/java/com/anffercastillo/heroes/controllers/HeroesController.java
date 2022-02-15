@@ -4,7 +4,7 @@ import com.anffercastillo.heroes.aspects.Measure;
 import com.anffercastillo.heroes.dto.HeroDTO;
 import com.anffercastillo.heroes.dto.HeroRequest;
 import com.anffercastillo.heroes.dto.SearchResponse;
-import com.anffercastillo.heroes.exceptions.HeroesNotFoundException;
+import com.anffercastillo.heroes.exceptions.HeroNotFoundException;
 import com.anffercastillo.heroes.services.HeroesService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -32,20 +32,19 @@ public class HeroesController {
   }
 
   @GetMapping("/{id}")
-  public HeroDTO getHero(@PathVariable long id) throws HeroesNotFoundException {
-    var hero = heroesService.getHero(id);
-    return hero;
+  public HeroDTO getHero(@PathVariable long id) throws HeroNotFoundException {
+    return heroesService.getHero(id);
   }
 
   @PreAuthorize("hasRole('ADMIN')")
   @DeleteMapping("/{id}")
-  public void deleteHero(@PathVariable long id) throws HeroesNotFoundException {
+  public void deleteHero(@PathVariable long id) throws HeroNotFoundException {
     heroesService.deleteHero(id);
   }
 
   @PreAuthorize("hasRole('ADMIN')")
   @PutMapping("/{id}")
-  public HeroDTO updateHero(@PathVariable long id, @RequestBody HeroRequest hero) throws Exception {
+  public HeroDTO updateHero(@PathVariable long id, @RequestBody HeroRequest hero) {
     return heroesService.updateHero(id, hero);
   }
 }

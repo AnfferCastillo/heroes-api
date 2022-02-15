@@ -2,7 +2,7 @@ package com.anffercastillo.heroes.repositories;
 
 import com.anffercastillo.heroes.dto.HeroDTO;
 import com.anffercastillo.heroes.dto.HeroRowMapper;
-import com.anffercastillo.heroes.exceptions.HeroesNotFoundException;
+import com.anffercastillo.heroes.exceptions.HeroNotFoundException;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -49,7 +49,7 @@ public class HeroesRepositoryImpl implements HeroesRepository {
     var hero = jdbcTemplate.queryForObject(QUERY_BY_ID, Map.of("id", id), new HeroRowMapper());
 
     if (hero != null) {
-      hero = setHeroSuperPowers(hero);
+      setHeroSuperPowers(hero);
     }
     return Optional.ofNullable(hero);
   }
@@ -67,7 +67,7 @@ public class HeroesRepositoryImpl implements HeroesRepository {
     var count = jdbcTemplate.update(DELETE_BY_ID, Map.of("id", id));
 
     if (count == 0) {
-      throw new HeroesNotFoundException();
+      throw new HeroNotFoundException();
     }
   }
 
@@ -93,7 +93,7 @@ public class HeroesRepositoryImpl implements HeroesRepository {
     if (count == 1) {
       return hero;
     } else {
-      throw new HeroesNotFoundException();
+      throw new HeroNotFoundException();
     }
   }
 

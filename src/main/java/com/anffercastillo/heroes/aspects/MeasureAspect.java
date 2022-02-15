@@ -23,8 +23,9 @@ public class MeasureAspect {
             .append(joinPoint.getSignature())
             .append(" took ")
             .append(executionTime)
-            .append("ms");
-    logger.info(message.toString());
+            .append("ms")
+            .toString();
+    logger.info(message);
     return proceed;
   }
 }

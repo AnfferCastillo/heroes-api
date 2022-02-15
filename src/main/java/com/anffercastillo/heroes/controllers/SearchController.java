@@ -18,8 +18,7 @@ public class SearchController {
   }
 
   @GetMapping
-  public SearchResponse getHeroesByName(@RequestParam(required = true) String term)
-      throws Exception {
+  public SearchResponse getHeroesByName(@RequestParam(required = true) String term) {
     var results = heroesService.getHeroesByName(term);
     return SearchResponse.buildResponse(results);
   }

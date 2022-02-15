@@ -4,7 +4,7 @@ import com.anffercastillo.heroes.dto.HeroDTO;
 import com.anffercastillo.heroes.dto.HeroRequest;
 import com.anffercastillo.heroes.entities.HeroesCompany;
 import com.anffercastillo.heroes.exceptions.HeroBadRequestException;
-import com.anffercastillo.heroes.exceptions.HeroesNotFoundException;
+import com.anffercastillo.heroes.exceptions.HeroNotFoundException;
 import com.anffercastillo.heroes.repositories.HeroesRepository;
 import com.anffercastillo.heroes.utils.HeroTestsUtils;
 import com.anffercastillo.heroes.utils.MessagesConstants;
@@ -42,7 +42,7 @@ public class HeroesServiceTest {
   }
 
   @Test
-  public void getHeroeById_Test() throws HeroesNotFoundException {
+  public void getHeroeById_Test() throws HeroNotFoundException {
     var id = 1L;
 
     when(mockHeroesRepository.findById(id)).thenReturn(Optional.of(buildDummyHero(id)));
@@ -58,7 +58,7 @@ public class HeroesServiceTest {
 
     when(mockHeroesRepository.findById(id)).thenReturn(Optional.empty());
     assertThrows(
-        HeroesNotFoundException.class,
+        HeroNotFoundException.class,
         () -> heroService.getHero(id),
         MessagesConstants.HERO_NOT_FOUND);
   }
@@ -73,7 +73,7 @@ public class HeroesServiceTest {
   }
 
   @Test
-  public void deleteById_Test() throws HeroesNotFoundException {
+  public void deleteById_Test() throws HeroNotFoundException {
     var id = 1L;
     var dummyHero1 = buildDummyHero(1L);
     var dummyHero2 = buildDummyHero(2L);
@@ -94,7 +94,7 @@ public class HeroesServiceTest {
   @Test
   public void deleteById_NotFound_Test() {
     assertThrows(
-        HeroesNotFoundException.class,
+        HeroNotFoundException.class,
         () -> heroService.deleteHero(-1L),
         MessagesConstants.HERO_NOT_FOUND);
   }

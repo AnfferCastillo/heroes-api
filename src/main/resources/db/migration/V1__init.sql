@@ -23,6 +23,6 @@ create table if not exists HEROES_SUPER_POWERS (
 create table if not exists USERS (
 	id INT,
 	username VARCHAR(15),
-	password VARCHAR(15),
+	password VARCHAR(100),
 	roles varchar(50)
 );

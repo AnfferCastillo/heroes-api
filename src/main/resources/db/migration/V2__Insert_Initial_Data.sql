@@ -48,6 +48,6 @@ insert into HEROES_SUPER_POWERS (hero_id, super_power_id) values (3, 9);
 insert into HEROES_SUPER_POWERS (hero_id, super_power_id) values (5, 15);
 insert into HEROES_SUPER_POWERS (hero_id, super_power_id) values (3, 4);
 
-insert into USERS (id, username, password, roles) values (1, 'user1', 'testing', 'ROLE_ADMIN');
-insert into USERS (id, username, password, roles) values (2, 'user2', 'testing', 'ROLE_USER');
+insert into USERS (id, username, password, roles) values (1, 'user1', '{bcrypt}$2a$10$IYKJlnWkstg4nIZDip1IMONr04Bn8hynWpSh6DVcOYotJnX7NikoS', 'ROLE_ADMIN');
+insert into USERS (id, username, password, roles) values (2, 'user2', '{bcrypt}$2a$10$IYKJlnWkstg4nIZDip1IMONr04Bn8hynWpSh6DVcOYotJnX7NikoS', 'ROLE_USER');
 

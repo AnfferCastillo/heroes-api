@@ -1,7 +1,7 @@
 package com.anffercastillo.heroes.repositories;
 
 import com.anffercastillo.heroes.dto.HeroRowMapper;
-import com.anffercastillo.heroes.exceptions.HeroesNotFoundException;
+import com.anffercastillo.heroes.exceptions.HeroNotFoundException;
 import com.anffercastillo.heroes.utils.HeroTestsUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -97,9 +97,9 @@ public class HeroesRepositoryImplTest {
   @Test
   public void deleteById_Not_Found_Test() {
     when(mockJdbcTemplate.update(eq(HeroesRepositoryImpl.QUERY_BY_ID), eq(Map.of("id", ID))))
-        .thenThrow(new HeroesNotFoundException());
+        .thenThrow(new HeroNotFoundException());
 
-    assertThrows(HeroesNotFoundException.class, () -> heroesRepository.deleteById(ID));
+    assertThrows(HeroNotFoundException.class, () -> heroesRepository.deleteById(ID));
     verify(mockJdbcTemplate, times(1))
         .update(eq(HeroesRepositoryImpl.DELETE_BY_ID), eq(Map.of("id", ID)));
   }

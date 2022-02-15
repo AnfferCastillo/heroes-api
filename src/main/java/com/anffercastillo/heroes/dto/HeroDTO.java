@@ -58,8 +58,9 @@ public class HeroDTO {
     dto.setName(request.getName());
     dto.setForename(request.getForename());
     dto.setCompany(request.getCompany().name());
-    dto.setSuperPowers(new ArrayList<SuperPowerDTO>());
+    dto.setSuperPowers(new ArrayList<>());
     dto.getSuperPowers().addAll(request.getSuperPowers());
+
     return dto;
   }
 

@@ -13,7 +13,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @ControllerAdvice
 public class HeroesExceptionHandler extends ResponseEntityExceptionHandler {
 
-  @ExceptionHandler(value = {HeroesNotFoundException.class, EmptyResultDataAccessException.class})
+  @ExceptionHandler(value = {HeroNotFoundException.class, EmptyResultDataAccessException.class})
   @ResponseStatus(HttpStatus.NOT_FOUND)
   public ResponseEntity<ErrorResponse> handleHeroesExceptions() {
     var errorResponse =
